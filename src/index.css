@@ -1,9 +1,22 @@
 @import "tailwindcss";
-@import "@fontsource/ibm-plex-sans/400.css";
-@import "@fontsource/outfit/700.css";
+@import "@fontsource/orbitron/400.css";
+@import "@fontsource/audiowide/400.css";
 
 @theme inline {
-  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif,
+  --font-sans: "Orbitron", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-outfit: "Outfit";
+  --font-audiowide: "Audiowide";
+
+  --color-green: oklch(89.03% 0.1739 171.27);
+  --color-green-50: oklch(94.933% 0.07278 181.09);
+  --color-green-100: oklch(93.727% 0.09171 180.43);
+  --color-green-200: oklch(91.749% 0.12428 178.18);
+  --color-green-300: oklch(90.371% 0.14831 176.28);
+  --color-green-400: oklch(89.483% 0.16467 174);
+  --color-green-500: oklch(89.03% 0.1739 171.27);
+  --color-green-600: oklch(73.877% 0.14403 171.46);
+  --color-green-700: oklch(57.895% 0.1125 171.78);
+  --color-green-800: oklch(40.704% 0.07856 172.47);
+  --color-green-900: oklch(21.362% 0.04029 174.96);
+  --color-green-950: oklch(8.6528% 0.01632 174.96);
 }

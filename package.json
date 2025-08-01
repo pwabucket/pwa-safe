@@ -10,13 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@fontsource/ibm-plex-sans": "^5.2.6",
-    "@fontsource/outfit": "^5.2.6",
+    "@fontsource/audiowide": "^5.2.6",
+    "@fontsource/orbitron": "^5.2.6",
     "@tailwindcss/vite": "^4.1.11",
+    "clsx": "^2.1.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router": "^7.7.1",
-    "tailwindcss": "^4.1.11"
+    "react-typed": "^2.0.12",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^4.1.11",
+    "use-sound": "^5.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
