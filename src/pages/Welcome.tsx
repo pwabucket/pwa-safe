@@ -1,21 +1,43 @@
+import OTPInput from "react-otp-input";
 import { ReactTyped } from "react-typed";
 import { useState } from "react";
 
-import AppIcon from "../assets/icon.svg";
 import Button from "../components/Button";
 import Input from "../components/Input";
-import Keypad, { KeyPadButton } from "../components/Keypad";
+import Keypad from "../components/Keypad";
+import useAppStore from "../store/useAppStore";
 import { cn } from "../lib/utils";
 
-function Welcome() {
-  const [accessCode, setAccessCode] = useState("");
+function AccessCodeCheck() {
+  const [input, setInput] = useState("");
   const handleInput = (value: string) => {
     if (value === "X") {
-      setAccessCode((prev) => prev.slice(0, -1));
+      setInput((prev) => prev.slice(0, -1));
     } else {
-      setAccessCode((prev) => prev + value);
+      setInput((prev) => (prev + value).slice(0, 6));
     }
   };
+
+  return (
+    <>
+      <OTPInput
+        value={input}
+        onChange={setInput}
+        numInputs={6}
+        inputType="password"
+        containerStyle={"flex gap-2"}
+        inputStyle={"basis-0 grow"}
+        renderInput={(props) => <Input {...props} />}
+      />
+
+      <Keypad onInput={handleInput} />
+    </>
+  );
+}
+
+function Welcome() {
+  const entries = useAppStore((state) => state.entries);
+
   return (
     <div
       className={cn(
@@ -23,33 +45,30 @@ function Welcome() {
         "min-h-dvh p-4 w-full max-w-sm mx-auto"
       )}
     >
-      <img src={AppIcon} alt="App Icon" className="size-26 mx-auto" />
-      <h1 className="font-audiowide text-4xl text-center">Safe</h1>
+      <h1 className="font-audiowide text-8xl text-center text-green-500">
+        safe
+      </h1>
       <p className="text-center text-green-500">
         <ReactTyped
-          typeSpeed={50}
-          backSpeed={50}
-          strings={["Welcome Agent", "To your encrypted safe"]}
+          loop
+          backDelay={2500}
+          strings={[
+            "Welcome, Agent",
+            "Mission Briefing: Confidential",
+            "Secure Channel Established",
+            "Decrypting Payload...",
+            "SAFE Online — No Backdoors Detected",
+          ]}
         />
       </p>
 
-      <div className="flex gap-2">
-        <Input
-          value={accessCode}
-          type="password"
-          placeholder="Access Code"
-          className="text-center w-full"
-          onChange={(e) => setAccessCode(e.target.value)}
-        />
-
-        <KeyPadButton className="px-4 py-2" onClick={() => handleInput("X")}>
-          X
-        </KeyPadButton>
-      </div>
-
-      <Keypad onInput={handleInput} />
-
-      <Button>Proceed</Button>
+      {entries.length > 0 ? (
+        <AccessCodeCheck />
+      ) : (
+        <>
+          <Button>Start</Button>
+        </>
+      )}
     </div>
   );
 }

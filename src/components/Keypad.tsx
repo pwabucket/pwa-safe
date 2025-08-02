@@ -16,7 +16,9 @@ export const KeyPadButton = (
       ref={ref}
       className={cn(
         "p-4 bg-neutral-700 cursor-pointer font-bold",
-        "border border-transparent hover:border-green-500",
+        "border border-transparent focus:outline-none",
+        "focus:border-green-500 hover:border-green-500",
+        "focus:text-green-500 hover:text-green-500",
         props.className
       )}
     />
@@ -37,6 +39,9 @@ const Keypad = ({ onInput }: { onInput: (value: string) => void }) => {
       <KeyPadButton onClick={() => onInput("9")}>9</KeyPadButton>
       <KeyPadButton onClick={() => onInput("0")} className="col-start-2">
         0
+      </KeyPadButton>
+      <KeyPadButton onClick={() => onInput("X")} className="bg-transparent">
+        X
       </KeyPadButton>
     </div>
   );
