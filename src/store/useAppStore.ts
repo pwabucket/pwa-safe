@@ -16,6 +16,12 @@ const useAppStore = create(
     }),
     {
       name: "app-storage",
+      partialize: (state) =>
+        Object.fromEntries(
+          Object.entries(state).filter(
+            ([key]) => !["isAuthenticated"].includes(key)
+          )
+        ) as AppStore,
     }
   )
 );
