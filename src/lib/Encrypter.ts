@@ -22,13 +22,13 @@ export default class Encrypter {
     });
   }
 
-  static async encrypt({
-    text,
+  static async encryptData({
+    data,
     password,
     salt,
     nonce,
   }: {
-    text: string;
+    data: string | Uint8Array | ArrayBuffer;
     password: string;
     salt?: string;
     nonce?: Uint8Array;
@@ -36,9 +36,16 @@ export default class Encrypter {
     const saltB64 = salt || this.generateSalt();
     const iv = nonce || randomBytes(this.NONCE_BYTES);
     const key = await this.scryptPass(password, saltB64);
-
     const cipher = aes256gcm(key, iv);
-    const encrypted = await cipher.encrypt(new TextEncoder().encode(text));
+
+    const dataBytes =
+      typeof data === "string"
+        ? new TextEncoder().encode(data)
+        : data instanceof ArrayBuffer
+        ? new Uint8Array(data)
+        : data;
+
+    const encrypted = await cipher.encrypt(dataBytes);
 
     const bundle = new Uint8Array(1 + iv.length + encrypted.length);
     bundle.set([this.VERSION]);
@@ -51,14 +58,16 @@ export default class Encrypter {
     };
   }
 
-  static async decrypt({
+  static async decryptData({
     encrypted,
     password,
     salt,
+    asText = true,
   }: {
     encrypted: string;
     password: string;
     salt: string;
+    asText?: boolean;
   }) {
     const bundle = base64.decode(encrypted);
     const version = bundle[0];
@@ -70,8 +79,9 @@ export default class Encrypter {
     const key = await this.scryptPass(password, salt);
     const cipher = aes256gcm(key, iv);
     const decrypted = await cipher.decrypt(cipherText);
+
     if (!decrypted) throw new Error("Invalid password or corrupted data");
 
-    return new TextDecoder().decode(decrypted);
+    return asText ? new TextDecoder().decode(decrypted) : decrypted;
   }
 }
