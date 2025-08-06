@@ -1,9 +1,11 @@
 import useSound from "use-sound";
-import { useEffect, type ForwardedRef } from "react";
+import { useEffect } from "react";
 
 import clickSfx from "../assets/sounds/button-click.wav";
 
-export default function useButtonClick(ref: ForwardedRef<Element>) {
+export default function useButtonClick<T extends Element>(
+  ref: React.RefObject<T | null>
+) {
   const [play] = useSound(clickSfx);
 
   useEffect(() => {

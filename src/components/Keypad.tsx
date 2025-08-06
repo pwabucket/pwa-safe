@@ -25,7 +25,15 @@ export const KeyPadButton = (
   );
 };
 
-const Keypad = ({ onInput }: { onInput: (value: string) => void }) => {
+const Keypad = ({
+  onInput,
+  onClear,
+  onDelete,
+}: {
+  onInput: (value: string) => void;
+  onClear: () => void;
+  onDelete: () => void;
+}) => {
   return (
     <div className="grid grid-cols-3 gap-2">
       <KeyPadButton onClick={() => onInput("1")}>1</KeyPadButton>
@@ -37,10 +45,13 @@ const Keypad = ({ onInput }: { onInput: (value: string) => void }) => {
       <KeyPadButton onClick={() => onInput("7")}>7</KeyPadButton>
       <KeyPadButton onClick={() => onInput("8")}>8</KeyPadButton>
       <KeyPadButton onClick={() => onInput("9")}>9</KeyPadButton>
+      <KeyPadButton onClick={() => onClear()} className="bg-transparent">
+        CLR
+      </KeyPadButton>
       <KeyPadButton onClick={() => onInput("0")} className="col-start-2">
         0
       </KeyPadButton>
-      <KeyPadButton onClick={() => onInput("X")} className="bg-transparent">
+      <KeyPadButton onClick={() => onDelete()} className="bg-transparent">
         X
       </KeyPadButton>
     </div>

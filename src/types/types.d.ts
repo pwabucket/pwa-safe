@@ -1,12 +1,12 @@
-export type DynamicAsProp = {
+export type DynamicAsProp<T extends React.ElementType> = {
   as?: T;
 };
 
 export type DynamicComponentProps<
   T extends React.ElementType,
   ExtraProps = object
-> = DynamicAsProp &
-  Omit<React.ComponentPropsWithRef<T>, "as" | keyof ExtraProps> &
+> = DynamicAsProp<T> &
+  Omit<React.ComponentPropsWithoutRef<T>, keyof ExtraProps | "as"> &
   ExtraProps;
 
 export type DynamicComponent<
@@ -14,14 +14,6 @@ export type DynamicComponent<
   ExtraProps = object
 > = <T extends React.ElementType = DefaultComponent>(
   props: DynamicComponentProps<T, ExtraProps> & {
-    ref?: React.Ref<Element>;
+    ref?: React.Ref<React.ElementRef<T>>;
   }
-) => React.ReactElement | null;
-
-export type ForwardedRefDynamicComponent<
-  DefaultComponent extends React.ElementType,
-  ExtraProps = object
-> = <T extends React.ElementType = DefaultComponent>(
-  props: DynamicComponentProps<T, ExtraProps>,
-  ref?: React.Ref<Element>
 ) => React.ReactElement | null;

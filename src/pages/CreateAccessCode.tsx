@@ -1,0 +1,59 @@
+import bcrypt from "bcryptjs";
+import { ReactTyped } from "react-typed";
+import { useCallback } from "react";
+
+import AccessCodeDialog from "../components/AccessCodeDialog";
+import AccessCodeInput from "../components/AccessCodeInput";
+import useAccessCodeDialogManager from "../hooks/useAccessCodeDialogManager";
+import useAppStore from "../store/useAppStore";
+import { cn } from "../lib/utils";
+
+export default function CreateAccessCode() {
+  const {
+    isDialogVisible,
+    isProcessing,
+    showDialog,
+    hideDialog,
+    startProcessing,
+    stopProcessing,
+  } = useAccessCodeDialogManager();
+
+  const setAccessCode = useAppStore((state) => state.setAccessCode);
+  const handleAccessCodeCreated = useCallback(
+    async (code: string) => {
+      showDialog();
+      startProcessing();
+      const hash = await bcrypt.hash(code, 10);
+      setAccessCode(hash);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      stopProcessing();
+    },
+    [setAccessCode, showDialog, startProcessing, stopProcessing]
+  );
+
+  return (
+    <div
+      className={cn(
+        "flex flex-col justify-center gap-4",
+        "min-h-dvh p-4 w-full max-w-sm mx-auto"
+      )}
+    >
+      <h1 className="text-2xl text-center text-green-500">Access Code</h1>
+
+      <p className="text-center bg-green-500/5 text-green-500 p-4">
+        <ReactTyped
+          typeSpeed={20}
+          strings={["Let's setup your account by creating an access code."]}
+        />
+      </p>
+      <AccessCodeInput onFilled={handleAccessCodeCreated} />
+
+      <AccessCodeDialog
+        mode="create"
+        isDialogVisible={isDialogVisible}
+        isProcessing={isProcessing}
+        onComplete={() => hideDialog()}
+      />
+    </div>
+  );
+}

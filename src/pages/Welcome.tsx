@@ -1,42 +1,53 @@
-import OTPInput from "react-otp-input";
+import bcrypt from "bcryptjs";
+import { Link } from "react-router";
 import { ReactTyped } from "react-typed";
-import { useState } from "react";
+import { useCallback } from "react";
 
+import AccessCodeDialog from "../components/AccessCodeDialog";
+import AccessCodeInput from "../components/AccessCodeInput";
 import Button from "../components/Button";
-import Input from "../components/Input";
-import Keypad from "../components/Keypad";
+import useAccessCodeDialogManager from "../hooks/useAccessCodeDialogManager";
 import useAppStore from "../store/useAppStore";
 import { cn } from "../lib/utils";
 
-function AccessCodeCheck() {
-  const [input, setInput] = useState("");
-  const handleInput = (value: string) => {
-    if (value === "X") {
-      setInput((prev) => prev.slice(0, -1));
-    } else {
-      setInput((prev) => (prev + value).slice(0, 6));
-    }
-  };
-
-  return (
-    <>
-      <OTPInput
-        value={input}
-        onChange={setInput}
-        numInputs={6}
-        inputType="password"
-        containerStyle={"flex gap-2"}
-        inputStyle={"basis-0 grow"}
-        renderInput={(props) => <Input {...props} />}
-      />
-
-      <Keypad onInput={handleInput} />
-    </>
-  );
-}
-
 function Welcome() {
-  const entries = useAppStore((state) => state.entries);
+  const accessCode = useAppStore((state) => state.accessCode);
+  const setIsAuthenticated = useAppStore((state) => state.setIsAuthenticated);
+
+  const {
+    isDialogVisible,
+    isProcessing,
+    isInvalidAccessCode,
+    showDialog,
+    hideDialog,
+    startProcessing,
+    stopProcessing,
+    markInvalidAccessCode,
+  } = useAccessCodeDialogManager();
+
+  const handleAccessCodeSubmit = useCallback(
+    async (code: string) => {
+      showDialog();
+      startProcessing();
+
+      const passed = await bcrypt.compare(code, accessCode || "");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      stopProcessing();
+      if (!passed) {
+        markInvalidAccessCode();
+        return;
+      }
+      setIsAuthenticated(true);
+    },
+    [
+      accessCode,
+      setIsAuthenticated,
+      showDialog,
+      startProcessing,
+      stopProcessing,
+      markInvalidAccessCode,
+    ]
+  );
 
   return (
     <div
@@ -45,12 +56,11 @@ function Welcome() {
         "min-h-dvh p-4 w-full max-w-sm mx-auto"
       )}
     >
-      <h1 className="font-audiowide text-8xl text-center text-green-500">
+      <h1 className="text-6xl text-center text-green-500 font-audiowide">
         safe
       </h1>
-      <p className="text-center text-green-500">
+      <p className="text-center text-green-500 px-4">
         <ReactTyped
-          loop
           backDelay={2500}
           strings={[
             "Welcome, Agent",
@@ -62,11 +72,27 @@ function Welcome() {
         />
       </p>
 
-      {entries.length > 0 ? (
-        <AccessCodeCheck />
+      <p className="bg-green-500/5 text-green-500 p-4">
+        <span className="font-bold">SAFE</span> is a secure vault for your
+        secrets, passwords, and sensitive information.
+      </p>
+
+      {accessCode ? (
+        <>
+          <AccessCodeInput onFilled={handleAccessCodeSubmit} />
+          <AccessCodeDialog
+            mode="verify"
+            isDialogVisible={isDialogVisible}
+            isProcessing={isProcessing}
+            isInvalidAccessCode={isInvalidAccessCode}
+            onComplete={() => hideDialog()}
+          />
+        </>
       ) : (
         <>
-          <Button>Start</Button>
+          <Button as={Link} to="/create-access-code" className="text-center">
+            Start
+          </Button>
         </>
       )}
     </div>
