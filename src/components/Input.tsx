@@ -1,13 +1,14 @@
+import type { DynamicComponent } from "../types/types";
 import { cn } from "../lib/utils";
 
-const Input = (
-  props: { className?: string } & React.ComponentPropsWithoutRef<"input">
-) => {
+const Input: DynamicComponent<"input"> = ({ as, ...props }) => {
+  const Component = as || "input";
   return (
-    <input
+    <Component
       {...props}
       className={cn(
-        "p-2 bg-neutral-700 text-white border border-transparent focus:outline-0 focus:border-green-500",
+        "p-2 text-green-100",
+        "border border-green-500 focus:outline-0 focus:bg-neutral-700",
         props.className
       )}
     />

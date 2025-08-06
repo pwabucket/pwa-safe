@@ -1,6 +1,8 @@
 import { Route, Routes } from "react-router";
 
 import CreateAccessCode from "./pages/CreateAccessCode";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./routes/ProtectedRoute";
 import Welcome from "./pages/Welcome";
 
 function App() {
@@ -9,6 +11,9 @@ function App() {
       <Routes>
         <Route index element={<Welcome />} />
         <Route path="/create-access-code" element={<CreateAccessCode />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
       </Routes>
     </>
   );

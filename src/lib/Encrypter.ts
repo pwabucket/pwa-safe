@@ -2,6 +2,8 @@ import { gcm as aes256gcm, randomBytes } from "@noble/ciphers/webcrypto";
 import { base64 } from "@scure/base";
 import { scryptAsync } from "@noble/hashes/scrypt";
 
+export type EncryptableData = string | Uint8Array | ArrayBuffer;
+
 export default class Encrypter {
   static VERSION = 1;
   static SALT_BYTES = 32;
@@ -27,11 +29,13 @@ export default class Encrypter {
     password,
     salt,
     nonce,
+    encode = true,
   }: {
-    data: string | Uint8Array | ArrayBuffer;
+    data: EncryptableData;
     password: string;
     salt?: string;
     nonce?: Uint8Array;
+    encode?: boolean;
   }) {
     const saltB64 = salt || this.generateSalt();
     const iv = nonce || randomBytes(this.NONCE_BYTES);
@@ -53,7 +57,7 @@ export default class Encrypter {
     bundle.set(encrypted, 1 + iv.length);
 
     return {
-      encrypted: base64.encode(bundle),
+      encrypted: encode ? base64.encode(bundle) : bundle,
       salt: saltB64,
     };
   }
@@ -64,12 +68,13 @@ export default class Encrypter {
     salt,
     asText = true,
   }: {
-    encrypted: string;
+    encrypted: string | Uint8Array;
     password: string;
     salt: string;
     asText?: boolean;
   }) {
-    const bundle = base64.decode(encrypted);
+    const bundle =
+      typeof encrypted === "string" ? base64.decode(encrypted) : encrypted;
     const version = bundle[0];
     if (version !== this.VERSION) throw new Error("Unsupported cipher version");
 

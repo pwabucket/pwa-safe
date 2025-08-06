@@ -1,7 +1,6 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { ReactTyped } from "react-typed";
 import { useCallback } from "react";
-
 import AccessCodeDialog from "../components/AccessCodeDialog";
 import AccessCodeInput from "../components/AccessCodeInput";
 import Button from "../components/Button";
@@ -10,6 +9,7 @@ import useAppStore from "../store/useAppStore";
 import { cn } from "../lib/utils";
 
 function Welcome() {
+  const navigate = useNavigate();
   const accessCodeHash = useAppStore((state) => state.accessCodeHash);
   const verifyAccessCode = useAppStore((state) => state.verifyAccessCode);
 
@@ -82,7 +82,10 @@ function Welcome() {
             isDialogVisible={isDialogVisible}
             isProcessing={isProcessing}
             isInvalidAccessCode={isInvalidAccessCode}
-            onComplete={() => hideDialog()}
+            onComplete={() => {
+              if (isInvalidAccessCode) hideDialog();
+              else navigate("/dashboard");
+            }}
           />
         </>
       ) : (

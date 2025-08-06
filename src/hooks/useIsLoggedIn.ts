@@ -1,6 +1,5 @@
-import useAppStore from "../store/useAppStore";
+import useAccessCode from "./useAccessCode";
 
 export default function useIsLoggedIn(): boolean {
-  const decryptedAccessCode = useAppStore((state) => state.decryptedAccessCode);
-  return Boolean(decryptedAccessCode);
+  return Boolean(useAccessCode());
 }

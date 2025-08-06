@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import Input from "./Input";
 import Keypad from "./Keypad";
+import { cn } from "../lib/utils";
 
 export default function AccessCodeInput({
   onFilled,
@@ -31,9 +32,10 @@ export default function AccessCodeInput({
         numInputs={6}
         inputType="password"
         containerStyle={"flex gap-2"}
-        inputStyle={
-          "basis-0 grow text-green-500 font-bold font-mono text-center"
-        }
+        inputStyle={cn(
+          "basis-0 grow text-green-500  font-bold font-mono text-center",
+          "border-transparent bg-neutral-700 focus:border-green-500"
+        )}
         renderInput={(props) => <Input {...props} />}
       />
 

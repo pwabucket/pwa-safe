@@ -1,5 +1,7 @@
+import { Navigate } from "react-router";
 import { ReactTyped } from "react-typed";
 import { useCallback } from "react";
+
 import AccessCodeDialog from "../components/AccessCodeDialog";
 import AccessCodeInput from "../components/AccessCodeInput";
 import useAccessCodeDialogManager from "../hooks/useAccessCodeDialogManager";
@@ -16,6 +18,7 @@ export default function CreateAccessCode() {
     stopProcessing,
   } = useAccessCodeDialogManager();
 
+  const accessCodeHash = useAppStore((state) => state.accessCodeHash);
   const setAccessCode = useAppStore((state) => state.setAccessCode);
   const handleAccessCodeCreated = useCallback(
     async (code: string) => {
@@ -27,6 +30,10 @@ export default function CreateAccessCode() {
     },
     [setAccessCode, showDialog, startProcessing, stopProcessing]
   );
+
+  if (accessCodeHash) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div
