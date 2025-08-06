@@ -58,7 +58,9 @@ const ImageContent = memo(({ content }: { content: File }) => {
         alt="Preview"
         className="w-full max-h-96 object-contain"
       />
-      <span className="text-sm text-center text-green-100">{content.name}</span>
+      <span className="text-sm text-center text-green-100 truncate">
+        {content.name}
+      </span>
     </Card>
   );
 });
@@ -66,8 +68,12 @@ const ImageContent = memo(({ content }: { content: File }) => {
 const FileContent = memo(({ content }: { content: File }) => {
   return (
     <Card className="flex flex-col gap-2">
-      <span className="text-sm text-center text-green-100">{content.name}</span>
-      <span className="text-xs text-center text-green-500">{content.type}</span>
+      <span className="text-sm text-center text-green-100 truncate">
+        {content.name}
+      </span>
+      <span className="text-xs text-center text-green-500 truncate">
+        {content.type}
+      </span>
     </Card>
   );
 });

@@ -1,5 +1,6 @@
 import { useRef } from "react";
 
+import Borders from "./Borders";
 import useButtonClick from "../hooks/useButtonClick";
 import type { DynamicComponent } from "../types/types";
 import { cn } from "../lib/utils";
@@ -21,10 +22,7 @@ const Button: DynamicComponent<"button"> = ({ as, ...props }) => {
         props.className
       )}
     >
-      <span className="absolute top-0 left-0 size-3 border-t-2 border-l-2 border-green-500" />
-      <span className="absolute top-0 right-0 size-3 border-t-2 border-r-2 border-green-500" />
-      <span className="absolute bottom-0 left-0 size-3 border-b-2 border-l-2 border-green-500" />
-      <span className="absolute bottom-0 right-0 size-3 border-b-2 border-r-2 border-green-500" />
+      <Borders />
       {props.children}
     </Component>
   );
