@@ -5,13 +5,15 @@ import {
   type GoogleDriveSlice,
 } from "./googleDriveSlice";
 import { createAppSlice, type AppSlice } from "./appSlice";
+import { createEntrySlice, type EntrySlice } from "./entrySlice";
 
-export type AppStore = AppSlice & GoogleDriveSlice;
+export type AppStore = AppSlice & EntrySlice & GoogleDriveSlice;
 
 const useAppStore = create(
   persist<AppStore>(
     (...a) => ({
       ...createAppSlice(...a),
+      ...createEntrySlice(...a),
       ...createGoogleDriveSlice(...a),
     }),
     {
@@ -19,7 +21,7 @@ const useAppStore = create(
       partialize: (state) =>
         Object.fromEntries(
           Object.entries(state).filter(
-            ([key]) => !["isAuthenticated"].includes(key)
+            ([key]) => !createAppSlice.excludes.includes(key as keyof AppSlice)
           )
         ) as AppStore,
     }

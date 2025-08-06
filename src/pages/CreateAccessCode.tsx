@@ -1,7 +1,5 @@
-import bcrypt from "bcryptjs";
 import { ReactTyped } from "react-typed";
 import { useCallback } from "react";
-
 import AccessCodeDialog from "../components/AccessCodeDialog";
 import AccessCodeInput from "../components/AccessCodeInput";
 import useAccessCodeDialogManager from "../hooks/useAccessCodeDialogManager";
@@ -23,8 +21,7 @@ export default function CreateAccessCode() {
     async (code: string) => {
       showDialog();
       startProcessing();
-      const hash = await bcrypt.hash(code, 10);
-      setAccessCode(hash);
+      await setAccessCode(code);
       await new Promise((resolve) => setTimeout(resolve, 1000));
       stopProcessing();
     },

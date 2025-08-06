@@ -1,4 +1,3 @@
-import bcrypt from "bcryptjs";
 import { Link } from "react-router";
 import { ReactTyped } from "react-typed";
 import { useCallback } from "react";
@@ -11,8 +10,8 @@ import useAppStore from "../store/useAppStore";
 import { cn } from "../lib/utils";
 
 function Welcome() {
-  const accessCode = useAppStore((state) => state.accessCode);
-  const setIsAuthenticated = useAppStore((state) => state.setIsAuthenticated);
+  const accessCodeHash = useAppStore((state) => state.accessCodeHash);
+  const verifyAccessCode = useAppStore((state) => state.verifyAccessCode);
 
   const {
     isDialogVisible,
@@ -30,22 +29,20 @@ function Welcome() {
       showDialog();
       startProcessing();
 
-      const passed = await bcrypt.compare(code, accessCode || "");
+      const passed = await verifyAccessCode(code);
       await new Promise((resolve) => setTimeout(resolve, 1000));
       stopProcessing();
       if (!passed) {
         markInvalidAccessCode();
         return;
       }
-      setIsAuthenticated(true);
     },
     [
-      accessCode,
-      setIsAuthenticated,
       showDialog,
       startProcessing,
       stopProcessing,
       markInvalidAccessCode,
+      verifyAccessCode,
     ]
   );
 
@@ -77,7 +74,7 @@ function Welcome() {
         secrets, passwords, and sensitive information.
       </p>
 
-      {accessCode ? (
+      {accessCodeHash ? (
         <>
           <AccessCodeInput onFilled={handleAccessCodeSubmit} />
           <AccessCodeDialog

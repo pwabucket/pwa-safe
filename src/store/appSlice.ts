@@ -1,40 +1,43 @@
+import bcrypt from "bcryptjs";
 import type { StateCreator } from "zustand";
 
-import type { Entry } from "../types/entry";
-
 export type AppSlice = {
-  accessCode: string | null;
-  isAuthenticated: boolean;
-  entries: Entry[];
-  setEntries: (entries: Entry[]) => void;
-  addEntry: (entry: Entry) => void;
-  removeEntry: (entryId: string) => void;
-  updateEntry: (entryId: string, updatedEntry: Entry) => void;
-  clearEntries: () => void;
-  setAccessCode: (accessCode: string | null) => void;
-  setIsAuthenticated: (isAuthenticated: boolean) => void;
+  accessCodeHash: string | null; // persisted
+  decryptedAccessCode: string | null; // in-memory only
+  setAccessCode: (plain: string) => Promise<void>;
+  verifyAccessCode: (input: string) => Promise<boolean>;
+  clearAccessCode: () => void;
 };
 
-export const createAppSlice: StateCreator<AppSlice> = (set) => ({
-  accessCode: null,
-  isAuthenticated: false,
-  entries: [],
-  setEntries: (entries) => set({ entries }),
-  addEntry: (entry) =>
-    set((state) => ({
-      entries: [...state.entries, entry],
-    })),
-  removeEntry: (entryId) =>
-    set((state) => ({
-      entries: state.entries.filter((entry) => entry.id !== entryId),
-    })),
-  updateEntry: (entryId, updatedEntry) =>
-    set((state) => ({
-      entries: state.entries.map((entry) =>
-        entry.id === entryId ? updatedEntry : entry
-      ),
-    })),
-  clearEntries: () => set({ entries: [] }),
-  setAccessCode: (accessCode) => set({ accessCode }),
-  setIsAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
+export const createAppSlice: StateCreator<AppSlice> & {
+  excludes: (keyof AppSlice)[];
+} = (set, get) => ({
+  accessCodeHash: null,
+  decryptedAccessCode: null,
+
+  setAccessCode: async (plain) => {
+    const hash = await bcrypt.hash(plain, 10);
+    set({
+      accessCodeHash: hash,
+      decryptedAccessCode: plain, // keep in memory
+    });
+  },
+
+  verifyAccessCode: async (input) => {
+    const hash = get().accessCodeHash;
+    if (!hash) return false;
+    const match = await bcrypt.compare(input, hash);
+    if (match) {
+      set({ decryptedAccessCode: input });
+    }
+    return match;
+  },
+
+  clearAccessCode: () => {
+    set({ decryptedAccessCode: null });
+  },
 });
+
+createAppSlice.excludes = [
+  "decryptedAccessCode", // in-memory only, not persisted,
+];
