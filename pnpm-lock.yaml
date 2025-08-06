@@ -14,6 +14,9 @@ importers:
       '@fontsource/orbitron':
         specifier: ^5.2.6
         version: 5.2.6
+      '@fontsource/share-tech-mono':
+        specifier: ^5.2.6
+        version: 5.2.6
       '@noble/ciphers':
         specifier: ^1.3.0
         version: 1.3.0
@@ -308,6 +311,9 @@ packages:
 
   '@fontsource/orbitron@5.2.6':
     resolution: {integrity: sha512-m6lI9jsts7Wk1gyMysEJSexkrZAqxDZ3DjTKMo4PJPKrYA3i//9iUp1Zy5NggPL6zyfQNbfpZwjtX9lrA3Zd3Q==}
+
+  '@fontsource/share-tech-mono@5.2.6':
+    resolution: {integrity: sha512-TyTv6Ty051CnSWkzvuGS6+sYVgjrSyGoKptbtoZKpQhS+HqPZqXQKJzSZo/RAhaapbasi02imbq9gOqACZ93+Q==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -1525,6 +1531,8 @@ snapshots:
   '@fontsource/audiowide@5.2.6': {}
 
   '@fontsource/orbitron@5.2.6': {}
+
+  '@fontsource/share-tech-mono@5.2.6': {}
 
   '@humanfs/core@0.19.1': {}
 
