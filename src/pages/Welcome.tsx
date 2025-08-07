@@ -10,39 +10,74 @@ import DialogContainer from "../components/DialogContainer";
 import SafeManager from "../lib/SafeManager";
 import useAccessCodeDialogManager from "../hooks/useAccessCodeDialogManager";
 import useAppStore from "../store/useAppStore";
+import useDialogManager from "../hooks/useDialogManager";
 import { cn } from "../lib/utils";
 
-const ResetSafe = () => {
+const ResetSafe = ({
+  dialogManager,
+}: {
+  dialogManager: ReturnType<typeof useDialogManager>;
+}) => {
   const clearEntries = useAppStore((state) => state.clearEntries);
   const resetAccessCode = useAppStore((state) => state.resetAccessCode);
 
   const handleReset = async () => {
+    dialogManager.startProcessing();
     const safeManager = new SafeManager();
     await safeManager.clearEntries();
     clearEntries();
     resetAccessCode();
+    dialogManager.stopProcessing();
+    dialogManager.markAsSuccess();
   };
 
   return (
-    <Dialog.Root>
-      <Dialog.Trigger className="text-xs text-green-100 mt-4 cursor-pointer">
-        INITIATE VOID SEQUENCE
-      </Dialog.Trigger>
-
-      <DialogContainer>
+    <Dialog.Root
+      open={dialogManager.isDialogVisible}
+      onOpenChange={dialogManager.hideDialog}
+    >
+      <DialogContainer onInteractOutside={(e) => e.preventDefault()}>
         <Dialog.Title className="text-xs uppercase text-green-300">
           Void Sequence
         </Dialog.Title>
-        <Dialog.Description className="text-yellow-100">
+        <Dialog.Description
+          className={cn(
+            "text-yellow-100",
+            dialogManager.isProcessing || dialogManager.isSuccess
+              ? "sr-only"
+              : ""
+          )}
+        >
           Initiating Safe reset. All entries and access codes will be
           permanently erased.
         </Dialog.Description>
 
-        <Button variant="danger" className="my-2" onClick={handleReset}>
-          Proceed
-        </Button>
+        {dialogManager.isProcessing ? (
+          <p className="text-green-100">Processing...</p>
+        ) : dialogManager.isSuccess ? (
+          <p className="text-green-100">
+            <ReactTyped
+              typeSpeed={20}
+              strings={[
+                "Safe reset complete.",
+                "All entries and access codes have been erased.",
+              ]}
+              onComplete={() =>
+                new Promise((resolve) => setTimeout(resolve, 2000)).then(() => {
+                  dialogManager.resetDialogState();
+                })
+              }
+            />
+          </p>
+        ) : (
+          <>
+            <Button variant="danger" className="my-2" onClick={handleReset}>
+              Proceed
+            </Button>
 
-        <Dialog.Close className="cursor-pointer">Abort</Dialog.Close>
+            <Dialog.Close className="cursor-pointer">Abort</Dialog.Close>
+          </>
+        )}
       </DialogContainer>
     </Dialog.Root>
   );
@@ -63,6 +98,8 @@ function Welcome() {
     stopProcessing,
     markInvalidAccessCode,
   } = useAccessCodeDialogManager();
+
+  const resetDialog = useDialogManager();
 
   const handleAccessCodeSubmit = useCallback(
     async (code: string) => {
@@ -128,7 +165,12 @@ function Welcome() {
             }}
           />
 
-          <ResetSafe />
+          <button
+            onClick={resetDialog.showDialog}
+            className="text-xs text-green-100 mt-4 cursor-pointer"
+          >
+            INITIATE VOID SEQUENCE
+          </button>
         </>
       ) : (
         <>
@@ -137,6 +179,8 @@ function Welcome() {
           </Button>
         </>
       )}
+
+      <ResetSafe dialogManager={resetDialog} />
     </div>
   );
 }

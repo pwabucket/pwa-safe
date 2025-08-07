@@ -1,22 +1,17 @@
-import { useCallback, useState } from "react";
+import useDialogManager from "./useDialogManager";
 
 export default function useAccessCodeDialogManager() {
-  const [isDialogVisible, setIsDialogVisible] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [isInvalidAccessCode, setIsInvalidAccessCode] = useState(false);
-
-  const showDialog = useCallback(() => setIsDialogVisible(true), []);
-  const hideDialog = useCallback(() => setIsDialogVisible(false), []);
-  const startProcessing = useCallback(() => setIsProcessing(true), []);
-  const stopProcessing = useCallback(() => setIsProcessing(false), []);
-  const markInvalidAccessCode = useCallback(
-    () => setIsInvalidAccessCode(true),
-    []
-  );
-  const resetInvalidAccessCode = useCallback(
-    () => setIsInvalidAccessCode(false),
-    []
-  );
+  const {
+    isDialogVisible,
+    isProcessing,
+    isError: isInvalidAccessCode,
+    markAsFailed: markInvalidAccessCode,
+    resetDialogState: resetInvalidAccessCode,
+    showDialog,
+    hideDialog,
+    startProcessing,
+    stopProcessing,
+  } = useDialogManager();
 
   return {
     isDialogVisible,

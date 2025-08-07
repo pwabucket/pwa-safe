@@ -18,7 +18,7 @@ export default function AccessCodeDialog({
 }) {
   return (
     <Dialog.Root open={isDialogVisible}>
-      <DialogContainer>
+      <DialogContainer onInteractOutside={(e) => e.preventDefault()}>
         <div className="flex gap-2">
           <div className="grow min-w-0">
             <Dialog.Title className="text-xs uppercase text-green-300">
