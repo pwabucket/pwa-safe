@@ -82,8 +82,10 @@ const FileContent = memo(({ content }: { content: File }) => {
 });
 
 export default function EntryForm({
+  disableTitle = false,
   onSubmit,
 }: {
+  disableTitle?: boolean;
   onSubmit: SubmitHandler<EntryFormData>;
 }) {
   const {
@@ -105,7 +107,9 @@ export default function EntryForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <Input placeholder="Title" {...register("title", { required: true })} />
+      {!disableTitle && (
+        <Input placeholder="Title" {...register("title", { required: true })} />
+      )}
 
       <Tabs.Root
         value={type}

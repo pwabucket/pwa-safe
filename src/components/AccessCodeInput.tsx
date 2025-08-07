@@ -1,5 +1,5 @@
 import OTPInput from "react-otp-input";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import Input from "./Input";
 import Keypad from "./Keypad";
@@ -11,18 +11,24 @@ export default function AccessCodeInput({
   onFilled?: (value: string) => void;
 }) {
   const [input, setInput] = useState("");
-  const handleInput = (value: string) => {
-    setInput((prev) => (prev + value).slice(0, 6));
-  };
 
-  const clearInput = () => setInput("");
-  const deleteInput = () => setInput((prev) => prev.slice(0, -1));
+  /** Handle input change */
+  const handleInputChange = useCallback(
+    (value: string) => {
+      const newValue = (input + value).slice(0, 6);
+      setInput(() => newValue);
+      if (newValue.length === 6 && onFilled) {
+        onFilled?.(newValue);
+      }
+    },
+    [input, onFilled]
+  );
 
-  useEffect(() => {
-    if (input.length === 6) {
-      onFilled?.(input);
-    }
-  }, [input, onFilled]);
+  const clearInput = useCallback(() => setInput(""), []);
+  const deleteInput = useCallback(
+    () => setInput((prev) => prev.slice(0, -1)),
+    []
+  );
 
   return (
     <div className="flex flex-col gap-4">
@@ -40,7 +46,7 @@ export default function AccessCodeInput({
       />
 
       <Keypad
-        onInput={handleInput}
+        onInput={handleInputChange}
         onClear={clearInput}
         onDelete={deleteInput}
       />

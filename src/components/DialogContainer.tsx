@@ -7,7 +7,7 @@ export default function DialogContainer(
 ) {
   return (
     <>
-      <Dialog.Overlay className="fixed inset-0 bg-black/70 p-6 grid place-items-center">
+      <Dialog.Overlay className="fixed inset-0 bg-black/70 p-6 grid place-items-center z-50">
         <Dialog.Content
           {...props}
           className={cn(

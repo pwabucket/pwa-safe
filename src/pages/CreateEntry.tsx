@@ -1,10 +1,12 @@
 import type { SubmitHandler } from "react-hook-form";
+
 import EntryForm from "../components/EntryForm";
 import InnerAppLayout from "../layouts/InnerAppLayout";
 import SafeManager from "../lib/SafeManager";
 import useAccessCode from "../hooks/useAccessCode";
 import useAppStore from "../store/useAppStore";
 import type { Entry, EntryFormData } from "../types/entry";
+import { createMetadata } from "../lib/utils";
 
 export default function CreateEntry() {
   const accessCode = useAccessCode();
@@ -24,18 +26,11 @@ export default function CreateEntry() {
 
     const entry: Entry = {
       id: result.id,
-      title: data.title,
-      type: data.type,
+      title: data.title as string,
       createdAt: Date.now(),
       updatedAt: Date.now(),
+      ...createMetadata(data.type, data.content),
     };
-
-    if (data.content instanceof File) {
-      entry.filename = data.content.name;
-      entry.filetype = data.content.type;
-      entry.filesize = data.content.size;
-      entry.fileLastModified = data.content.lastModified;
-    }
 
     addEntry(entry);
   };

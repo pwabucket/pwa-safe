@@ -8,8 +8,8 @@ import Encrypter, {
 import { uuid } from "./utils";
 import localforage from "localforage";
 
-interface LocalForageEntry {
-  encryptedContent: EncryptionResult;
+export interface EncryptedData {
+  encryptedData: EncryptionResult;
   encryptedKey: EncryptionResult;
 }
 
@@ -69,14 +69,14 @@ export default class SafeManager {
   async storeEntry({
     id,
     encryptedKey,
-    encryptedContent,
+    encryptedData,
   }: {
     id: string;
     encryptedKey: EncryptionResult;
-    encryptedContent: EncryptionResult;
+    encryptedData: EncryptionResult;
   }) {
     await this.store.setItem(`${id}:key`, encryptedKey);
-    await this.store.setItem(`${id}:data`, encryptedContent);
+    await this.store.setItem(`${id}:data`, encryptedData);
   }
 
   async getEncryptedKey(id: string) {
@@ -89,39 +89,55 @@ export default class SafeManager {
 
   async getEntry(id: string) {
     const encryptedKey = await this.getEncryptedKey(id);
-    const encryptedContent = await this.getEncryptedData(id);
+    const encryptedData = await this.getEncryptedData(id);
 
-    if (!encryptedKey || !encryptedContent) {
+    if (!encryptedKey || !encryptedData) {
       throw new Error(`Entry with id ${id} not found`);
     }
 
     return {
       encryptedKey,
-      encryptedContent,
-    } as LocalForageEntry;
+      encryptedData,
+    } as EncryptedData;
+  }
+
+  async decryptContent({
+    accessCode,
+    encryptedKey,
+    encryptedData,
+  }: {
+    accessCode: string;
+    encryptedKey: EncryptionResult;
+    encryptedData: EncryptionResult;
+  }) {
+    const decryptedPassword = await this.decrypt({
+      password: accessCode,
+      encryptedData: encryptedKey.encrypted as Uint8Array,
+      salt: encryptedKey.salt,
+      asText: true,
+    });
+
+    const decryptedContent = await this.decrypt({
+      password: decryptedPassword as string,
+      encryptedData: encryptedData.encrypted as Uint8Array,
+      salt: encryptedData.salt,
+    });
+
+    return decryptedContent as Uint8Array;
   }
 
   async getEntryContent({
     entry,
     accessCode,
   }: {
-    entry: LocalForageEntry;
+    entry: EncryptedData;
     accessCode: string;
   }) {
-    const decryptedPassword = await this.decrypt({
-      password: accessCode,
-      encryptedData: entry.encryptedKey.encrypted as Uint8Array,
-      salt: entry.encryptedKey.salt,
-      asText: true,
+    return this.decryptContent({
+      accessCode,
+      encryptedKey: entry.encryptedKey,
+      encryptedData: entry.encryptedData,
     });
-
-    const decryptedContent = await this.decrypt({
-      password: decryptedPassword as string,
-      encryptedData: entry.encryptedContent.encrypted as Uint8Array,
-      salt: entry.encryptedContent.salt,
-    });
-
-    return decryptedContent as Uint8Array;
   }
 
   async decryptEntry({ id, accessCode }: { id: string; accessCode: string }) {
@@ -133,17 +149,15 @@ export default class SafeManager {
     });
   }
 
-  async createEntry({
+  async createEncryption({
     accessCode,
     content,
   }: {
     accessCode: string;
     content: EncryptableData;
   }) {
-    const id = uuid();
     const entryKey = this.generateEntryKey();
-
-    const encryptedContent = await this.encrypt({
+    const encryptedData = await this.encrypt({
       data: content,
       password: entryKey,
     });
@@ -153,7 +167,26 @@ export default class SafeManager {
       password: accessCode,
     });
 
-    await this.storeEntry({ id, encryptedKey, encryptedContent });
+    return {
+      encryptedKey,
+      encryptedData,
+    };
+  }
+
+  async createEntry({
+    accessCode,
+    content,
+  }: {
+    accessCode: string;
+    content: EncryptableData;
+  }) {
+    const id = uuid();
+    const { encryptedKey, encryptedData } = await this.createEncryption({
+      accessCode,
+      content,
+    });
+
+    await this.storeEntry({ id, encryptedKey, encryptedData });
 
     return {
       id,
