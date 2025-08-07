@@ -1,5 +1,4 @@
 import type { SubmitHandler } from "react-hook-form";
-
 import EntryForm from "../components/EntryForm";
 import InnerAppLayout from "../layouts/InnerAppLayout";
 import SafeManager from "../lib/SafeManager";
@@ -18,7 +17,11 @@ export default function CreateEntry() {
         : data.content;
     const dataToEncrypt = await content;
     const safeManager = new SafeManager();
-    const result = await safeManager.createEntry(accessCode!, dataToEncrypt);
+    const result = await safeManager.createEntry({
+      accessCode: accessCode as string,
+      content: dataToEncrypt,
+    });
+
     const entry: Entry = {
       id: result.id,
       title: data.title,
@@ -30,6 +33,8 @@ export default function CreateEntry() {
     if (data.content instanceof File) {
       entry.filename = data.content.name;
       entry.filetype = data.content.type;
+      entry.filesize = data.content.size;
+      entry.fileLastModified = data.content.lastModified;
     }
 
     addEntry(entry);

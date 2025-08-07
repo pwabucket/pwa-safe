@@ -9,7 +9,7 @@ type EncryptionResult = Awaited<ReturnType<typeof Encrypter.encryptData>>;
 
 interface LocalForageEntry {
   encryptedContent: EncryptionResult;
-  encryptedPassword: EncryptionResult;
+  encryptedKey: EncryptionResult;
 }
 
 export default class SafeManager {
@@ -21,25 +21,37 @@ export default class SafeManager {
     });
   }
 
-  generateEntryPassword() {
+  generateEntryKey() {
     return base64.encode(randomBytes(32));
   }
 
-  async encrypt(password: string, data: EncryptableData) {
+  async encrypt({
+    data,
+    password,
+  }: {
+    data: EncryptableData;
+    password: string;
+  }) {
     const result = await Encrypter.encryptData({
       data,
       password,
       encode: false,
     });
+
     return result;
   }
 
-  async decrypt(
-    password: string,
-    encryptedData: Uint8Array,
-    salt: string,
-    asText = false
-  ) {
+  async decrypt({
+    password,
+    encryptedData,
+    salt,
+    asText = false,
+  }: {
+    password: string;
+    encryptedData: Uint8Array | string;
+    salt: string;
+    asText?: boolean;
+  }) {
     return await Encrypter.decryptData({
       encrypted: encryptedData,
       password,
@@ -49,53 +61,94 @@ export default class SafeManager {
   }
 
   async deleteEntry(id: string) {
-    await this.store.removeItem(id);
+    await this.store.removeItem(`${id}:key`);
+    await this.store.removeItem(`${id}:data`);
   }
 
-  async storeEntry(
-    id: string,
-    encryptedContent: EncryptionResult,
-    encryptedPassword: EncryptionResult
-  ) {
-    return this.store.setItem(id, {
-      encryptedContent,
-      encryptedPassword,
-    });
+  async storeEntry({
+    id,
+    encryptedKey,
+    encryptedContent,
+  }: {
+    id: string;
+    encryptedKey: EncryptionResult;
+    encryptedContent: EncryptionResult;
+  }) {
+    await this.store.setItem(`${id}:key`, encryptedKey);
+    await this.store.setItem(`${id}:data`, encryptedContent);
   }
 
   async getEntry(id: string) {
-    const entry = await this.store.getItem<LocalForageEntry>(id);
-    if (!entry) {
+    const encryptedKey = await this.store.getItem<EncryptionResult>(
+      `${id}:key`
+    );
+    const encryptedContent = await this.store.getItem<EncryptionResult>(
+      `${id}:data`
+    );
+
+    if (!encryptedKey || !encryptedContent) {
       throw new Error(`Entry with id ${id} not found`);
     }
-    return entry;
+
+    return {
+      encryptedKey,
+      encryptedContent,
+    } as LocalForageEntry;
   }
 
-  async decryptEntry(id: string, accessCode: string) {
+  async getEntryContent({
+    entry,
+    accessCode,
+  }: {
+    entry: LocalForageEntry;
+    accessCode: string;
+  }) {
+    const decryptedPassword = await this.decrypt({
+      password: accessCode,
+      encryptedData: entry.encryptedKey.encrypted as Uint8Array,
+      salt: entry.encryptedKey.salt,
+      asText: true,
+    });
+
+    const decryptedContent = await this.decrypt({
+      password: decryptedPassword as string,
+      encryptedData: entry.encryptedContent.encrypted as Uint8Array,
+      salt: entry.encryptedContent.salt,
+    });
+
+    return decryptedContent as Uint8Array;
+  }
+
+  async decryptEntry({ id, accessCode }: { id: string; accessCode: string }) {
     const entry = await this.getEntry(id);
-    const decryptedPassword = await this.decrypt(
+
+    return await this.getEntryContent({
+      entry,
       accessCode,
-      entry.encryptedPassword.encrypted as Uint8Array,
-      entry.encryptedPassword.salt,
-      true
-    );
-
-    const decryptedContent = await this.decrypt(
-      decryptedPassword as string,
-      entry.encryptedContent.encrypted as Uint8Array,
-      entry.encryptedContent.salt
-    );
-
-    return decryptedContent;
+    });
   }
 
-  async createEntry(accessCode: string, content: EncryptableData) {
+  async createEntry({
+    accessCode,
+    content,
+  }: {
+    accessCode: string;
+    content: EncryptableData;
+  }) {
     const id = uuid();
-    const entryPassword = this.generateEntryPassword();
-    const encryptedContent = await this.encrypt(entryPassword, content);
-    const encryptedPassword = await this.encrypt(accessCode, entryPassword);
+    const entryKey = this.generateEntryKey();
 
-    await this.storeEntry(id, encryptedPassword, encryptedContent);
+    const encryptedContent = await this.encrypt({
+      data: content,
+      password: entryKey,
+    });
+
+    const encryptedKey = await this.encrypt({
+      data: entryKey,
+      password: accessCode,
+    });
+
+    await this.storeEntry({ id, encryptedKey, encryptedContent });
 
     return {
       id,

@@ -55,6 +55,9 @@ const ImageContent = memo(({ content }: { content: File }) => {
     <Card className="flex flex-col gap-2">
       <img
         src={URL.createObjectURL(content)}
+        onLoad={(e) => {
+          URL.revokeObjectURL((e.target as HTMLImageElement).src);
+        }}
         alt="Preview"
         className="w-full max-h-96 object-contain"
       />

@@ -75,6 +75,7 @@ export default class Encrypter {
   }) {
     const bundle =
       typeof encrypted === "string" ? base64.decode(encrypted) : encrypted;
+
     const version = bundle[0];
     if (version !== this.VERSION) throw new Error("Unsupported cipher version");
 
@@ -83,6 +84,7 @@ export default class Encrypter {
 
     const key = await this.scryptPass(password, salt);
     const cipher = aes256gcm(key, iv);
+
     const decrypted = await cipher.decrypt(cipherText);
 
     if (!decrypted) throw new Error("Invalid password or corrupted data");

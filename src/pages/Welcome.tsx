@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router";
 import { ReactTyped } from "react-typed";
 import { useCallback } from "react";
+
 import AccessCodeDialog from "../components/AccessCodeDialog";
 import AccessCodeInput from "../components/AccessCodeInput";
 import Button from "../components/Button";
@@ -30,7 +31,7 @@ function Welcome() {
       startProcessing();
 
       const passed = await verifyAccessCode(code);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       stopProcessing();
       if (!passed) {
         markInvalidAccessCode();

@@ -19,6 +19,7 @@
     "@tailwindcss/vite": "^4.1.11",
     "bcryptjs": "^3.0.2",
     "clsx": "^2.1.1",
+    "copy-to-clipboard": "^3.3.3",
     "localforage": "^1.10.0",
     "radix-ui": "^1.4.2",
     "react": "^19.1.0",

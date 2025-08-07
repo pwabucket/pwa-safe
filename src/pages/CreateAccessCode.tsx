@@ -25,7 +25,7 @@ export default function CreateAccessCode() {
       showDialog();
       startProcessing();
       await setAccessCode(code);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       stopProcessing();
     },
     [setAccessCode, showDialog, startProcessing, stopProcessing]
