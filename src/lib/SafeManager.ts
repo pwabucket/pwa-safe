@@ -1,11 +1,12 @@
 import { base64 } from "@scure/base";
 import { randomBytes } from "@noble/ciphers/webcrypto";
 
-import Encrypter, { type EncryptableData } from "./Encrypter";
+import Encrypter, {
+  type EncryptableData,
+  type EncryptionResult,
+} from "./Encrypter";
 import { uuid } from "./utils";
 import localforage from "localforage";
-
-type EncryptionResult = Awaited<ReturnType<typeof Encrypter.encryptData>>;
 
 interface LocalForageEntry {
   encryptedContent: EncryptionResult;
@@ -78,13 +79,17 @@ export default class SafeManager {
     await this.store.setItem(`${id}:data`, encryptedContent);
   }
 
+  async getEncryptedKey(id: string) {
+    return await this.store.getItem<EncryptionResult>(`${id}:key`);
+  }
+
+  async getEncryptedData(id: string) {
+    return await this.store.getItem<EncryptionResult>(`${id}:data`);
+  }
+
   async getEntry(id: string) {
-    const encryptedKey = await this.store.getItem<EncryptionResult>(
-      `${id}:key`
-    );
-    const encryptedContent = await this.store.getItem<EncryptionResult>(
-      `${id}:data`
-    );
+    const encryptedKey = await this.getEncryptedKey(id);
+    const encryptedContent = await this.getEncryptedData(id);
 
     if (!encryptedKey || !encryptedContent) {
       throw new Error(`Entry with id ${id} not found`);

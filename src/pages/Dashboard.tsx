@@ -1,4 +1,4 @@
-import { HiOutlinePlus } from "react-icons/hi2";
+import { HiOutlineBars3, HiOutlinePlus } from "react-icons/hi2";
 import { Link } from "react-router";
 import { ReactTyped } from "react-typed";
 import { useMemo, useState } from "react";
@@ -20,6 +20,9 @@ export default function Dashboard() {
   );
   return (
     <AppLayout
+      headerLeftContent={
+        <HeaderButton icon={HiOutlineBars3} as={Link} to="/menu" />
+      }
       headerRightContent={
         <HeaderButton icon={HiOutlinePlus} as={Link} to="/entries/create" />
       }

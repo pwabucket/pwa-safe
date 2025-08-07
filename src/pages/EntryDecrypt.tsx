@@ -1,3 +1,4 @@
+import JSZip from "jszip";
 import copy from "copy-to-clipboard";
 import { ReactTyped } from "react-typed";
 import { useParams } from "react-router";
@@ -9,6 +10,7 @@ import InnerAppLayout from "../layouts/InnerAppLayout";
 import SafeManager from "../lib/SafeManager";
 import useAccessCode from "../hooks/useAccessCode";
 import useAppStore from "../store/useAppStore";
+import type { EncryptionResult } from "../lib/Encrypter";
 import type { Entry } from "../types/entry";
 
 const downloadFile = (content: Blob | File, filename: string) => {
@@ -16,6 +18,19 @@ const downloadFile = (content: Blob | File, filename: string) => {
   link.href = URL.createObjectURL(content);
   link.download = filename;
   link.click();
+};
+
+const zipAndDownloadEncryptedResult = (
+  title: string,
+  encryptionResult: EncryptionResult
+) => {
+  const zip = new JSZip();
+
+  zip.file(`${title}.salt`, encryptionResult.salt);
+  zip.file(`${title}.enc`, encryptionResult.encrypted as Uint8Array);
+  zip.generateAsync({ type: "blob" }).then((content) => {
+    downloadFile(content, `${title}.zip`);
+  });
 };
 
 const TextEntryContent = ({ content }: { content: string }) => {
@@ -127,6 +142,27 @@ export default function EntryDecrypt() {
     setContent(result);
   };
 
+  /** Download Key */
+  const downloadKey = async () => {
+    const manager = new SafeManager();
+    const encryptedKey = await manager.getEncryptedKey(entryId);
+
+    await zipAndDownloadEncryptedResult(
+      `${entryId}-key`,
+      encryptedKey as EncryptionResult
+    );
+  };
+
+  const downloadData = async () => {
+    const manager = new SafeManager();
+    const encryptedContent = await manager.getEncryptedData(entryId);
+
+    await zipAndDownloadEncryptedResult(
+      `${entryId}-data`,
+      encryptedContent as EncryptionResult
+    );
+  };
+
   return (
     <InnerAppLayout
       headerTitle={entry?.title || "Unknown"}
@@ -143,6 +179,11 @@ export default function EntryDecrypt() {
           />
         </p>
       </Card>
+
+      <div className="grid grid-cols-2 gap-4">
+        <Button onClick={downloadKey}>Download Key</Button>
+        <Button onClick={downloadData}>Download Data</Button>
+      </div>
 
       {content ? (
         <>
@@ -162,7 +203,7 @@ export default function EntryDecrypt() {
           )}
         </>
       ) : (
-        <Button onClick={handleDecrypt}>Decrypt</Button>
+        <Button onClick={handleDecrypt}>Decrypt Data</Button>
       )}
     </InnerAppLayout>
   );
