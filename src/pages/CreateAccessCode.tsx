@@ -31,7 +31,7 @@ export default function CreateAccessCode() {
     [setAccessCode, showDialog, startProcessing, stopProcessing]
   );
 
-  if (accessCodeHash) {
+  if (accessCodeHash && isDialogVisible === false) {
     return <Navigate to="/" replace />;
   }
 
