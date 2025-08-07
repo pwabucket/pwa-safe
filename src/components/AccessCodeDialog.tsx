@@ -17,47 +17,51 @@ export default function AccessCodeDialog({
   onComplete: () => void;
 }) {
   return (
-    <DialogContainer open={isDialogVisible}>
-      <div className="grow min-w-0">
-        <Dialog.Title className="text-xs uppercase text-green-300">
-          Agent Log
-        </Dialog.Title>
-        <Dialog.Description className="sr-only">
-          Access Code {mode === "create" ? "Creation" : "Verification"}
-        </Dialog.Description>
+    <Dialog.Root open={isDialogVisible}>
+      <DialogContainer>
+        <div className="flex gap-2">
+          <div className="grow min-w-0">
+            <Dialog.Title className="text-xs uppercase text-green-300">
+              Agent Log
+            </Dialog.Title>
+            <Dialog.Description className="sr-only">
+              Access Code {mode === "create" ? "Creation" : "Verification"}
+            </Dialog.Description>
 
-        <p
-          className={
-            mode === "verify" && !isProcessing && isInvalidAccessCode
-              ? "text-yellow-100"
-              : "text-green-100"
-          }
-        >
-          {isProcessing ? (
-            <>Processing...</>
-          ) : (
-            <ReactTyped
-              typeSpeed={20}
-              strings={[
-                mode === "create"
-                  ? "Access Code Created!"
-                  : isInvalidAccessCode
-                  ? "Access Code Invalid!"
-                  : "Access Code Verified!",
-                mode === "verify" && isInvalidAccessCode
-                  ? "This incident will be reported, please try again."
-                  : "You can now access your safe.",
-              ]}
-              onComplete={() =>
-                new Promise((resolve) => setTimeout(resolve, 2000)).then(() =>
-                  onComplete()
-                )
+            <p
+              className={
+                mode === "verify" && !isProcessing && isInvalidAccessCode
+                  ? "text-yellow-100"
+                  : "text-green-100"
               }
-            />
-          )}
-        </p>
-      </div>
-      <div className="text-right text-green-400 text-sm">🛡️</div>
-    </DialogContainer>
+            >
+              {isProcessing ? (
+                <>Processing...</>
+              ) : (
+                <ReactTyped
+                  typeSpeed={20}
+                  strings={[
+                    mode === "create"
+                      ? "Access Code Created!"
+                      : isInvalidAccessCode
+                      ? "Access Code Invalid!"
+                      : "Access Code Verified!",
+                    mode === "verify" && isInvalidAccessCode
+                      ? "This incident will be reported, please try again."
+                      : "You can now access your safe.",
+                  ]}
+                  onComplete={() =>
+                    new Promise((resolve) => setTimeout(resolve, 2000)).then(
+                      () => onComplete()
+                    )
+                  }
+                />
+              )}
+            </p>
+          </div>
+          <div className="text-right text-green-400 text-sm">🛡️</div>
+        </div>
+      </DialogContainer>
+    </Dialog.Root>
   );
 }

@@ -154,4 +154,8 @@ export default class SafeManager {
       id,
     };
   }
+
+  async clearEntries() {
+    await this.store.clear();
+  }
 }

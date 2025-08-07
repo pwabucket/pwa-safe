@@ -7,6 +7,7 @@ export type AppSlice = {
   setAccessCode: (plain: string) => Promise<void>;
   verifyAccessCode: (input: string) => Promise<boolean>;
   clearAccessCode: () => void;
+  resetAccessCode: () => void;
 };
 
 export const createAppSlice: StateCreator<AppSlice> & {
@@ -35,6 +36,10 @@ export const createAppSlice: StateCreator<AppSlice> & {
 
   clearAccessCode: () => {
     set({ decryptedAccessCode: null });
+  },
+
+  resetAccessCode: () => {
+    set({ accessCodeHash: null, decryptedAccessCode: null });
   },
 });
 
