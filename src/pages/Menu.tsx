@@ -32,6 +32,10 @@ export default function Menu() {
       </Button>
 
       <Button onClick={signOut}>Sign Out</Button>
+
+      <p className="text-center text-green-300">
+        v{import.meta.env.PACKAGE_VERSION}
+      </p>
     </InnerAppLayout>
   );
 }
