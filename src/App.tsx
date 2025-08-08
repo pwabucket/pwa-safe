@@ -10,7 +10,9 @@ import EntryUpdate from "./pages/EntryUpdate";
 import Export from "./pages/Export";
 import Import from "./pages/Import";
 import Menu from "./pages/Menu";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import TermsOfUse from "./pages/TermsOfUse";
 import Welcome from "./pages/Welcome";
 import useInactivity from "./hooks/useInactivity";
 
@@ -23,6 +25,12 @@ function App() {
     <>
       <Routes>
         <Route index element={<Welcome />} />
+        {/* Privacy Policy */}
+        <Route path="privacy-policy" element={<PrivacyPolicy />} />
+
+        {/* Terms of Use*/}
+        <Route path="terms-of-use" element={<TermsOfUse />} />
+
         <Route path="/create-access-code" element={<CreateAccessCode />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />

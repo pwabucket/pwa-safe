@@ -33,6 +33,16 @@ export default function Menu() {
 
       <Button onClick={signOut}>Sign Out</Button>
 
+      <div className="grid grid-cols-2 gap-2 mt-4 text-center">
+        <Button as={Link} to="/privacy-policy">
+          Privacy Policy
+        </Button>
+
+        <Button as={Link} to="/terms-of-use">
+          Terms of Use
+        </Button>
+      </div>
+
       <p className="text-center text-green-300">
         v{import.meta.env.PACKAGE_VERSION}
       </p>

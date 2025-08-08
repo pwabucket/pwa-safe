@@ -3,6 +3,7 @@
 @import "@fontsource/orbitron/700.css";
 @import "@fontsource/audiowide/400.css";
 @import "@fontsource/share-tech-mono/400.css";
+@plugin "@tailwindcss/typography";
 
 @theme inline {
   --font-sans: "Orbitron", ui-sans-serif, system-ui, sans-serif,
