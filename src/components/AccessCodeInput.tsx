@@ -12,16 +12,23 @@ export default function AccessCodeInput({
 }) {
   const [input, setInput] = useState("");
 
-  /** Handle input change */
-  const handleInputChange = useCallback(
+  const updateInput = useCallback(
     (value: string) => {
-      const newValue = (input + value).slice(0, 6);
-      setInput(() => newValue);
+      const newValue = value.slice(0, 6);
+      setInput(newValue);
       if (newValue.length === 6 && onFilled) {
-        onFilled?.(newValue);
+        onFilled(newValue);
       }
     },
-    [input, onFilled]
+    [onFilled]
+  );
+
+  /** Handle keypad input */
+  const handleKeypadInput = useCallback(
+    (value: string) => {
+      updateInput(input + value);
+    },
+    [input, updateInput]
   );
 
   const clearInput = useCallback(() => setInput(""), []);
@@ -34,7 +41,7 @@ export default function AccessCodeInput({
     <div className="flex flex-col gap-4">
       <OTPInput
         value={input}
-        onChange={setInput}
+        onChange={updateInput}
         numInputs={6}
         inputType="password"
         containerStyle={"flex gap-2"}
@@ -46,7 +53,7 @@ export default function AccessCodeInput({
       />
 
       <Keypad
-        onInput={handleInputChange}
+        onInput={handleKeypadInput}
         onClear={clearInput}
         onDelete={deleteInput}
       />
