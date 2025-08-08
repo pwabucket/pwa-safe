@@ -37,7 +37,7 @@ const Dropzone = ({
   const { getRootProps, getInputProps, isDragActive } = useDropzone(props);
 
   return (
-    <Card {...getRootProps()} className="text-sm text-center">
+    <Card {...getRootProps()} className="text-sm text-center py-6">
       <input {...getInputProps()} />
       {isDragActive ? (
         <p>Drop the {type} here ...</p>
@@ -154,9 +154,11 @@ export default function EntryForm({
           {content && <FileContent content={content as File} />}
           <Dropzone
             type="file"
-            accept={{ "application/*": [] }}
             onDrop={(acceptedFiles) => {
               if (acceptedFiles.length > 0) {
+                if (acceptedFiles[0].type.startsWith("image/")) {
+                  setValue("type", "image");
+                }
                 setValue("content", acceptedFiles[0]);
               }
             }}
