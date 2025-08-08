@@ -1,5 +1,6 @@
+import { HiOutlinePencil } from "react-icons/hi2";
+import { Link, useParams } from "react-router";
 import { ReactTyped } from "react-typed";
-import { useParams } from "react-router";
 import { useState } from "react";
 
 import Button from "../components/Button";
@@ -10,6 +11,7 @@ import SafeManager from "../lib/SafeManager";
 import useAccessCode from "../hooks/useAccessCode";
 import useAppStore from "../store/useAppStore";
 import type { Entry } from "../types/entry";
+import { HeaderButton } from "../layouts/HeaderButton";
 import { zipAndDownloadBundle } from "../lib/utils";
 
 export default function EntryDecryption() {
@@ -59,6 +61,13 @@ export default function EntryDecryption() {
   return (
     <InnerAppLayout
       headerTitle={entry?.title || "Unknown"}
+      headerRightContent={
+        <HeaderButton
+          as={Link}
+          icon={HiOutlinePencil}
+          to={`/entries/${entryId}/update`}
+        />
+      }
       className="flex flex-col gap-4"
     >
       <Card>

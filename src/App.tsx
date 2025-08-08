@@ -6,6 +6,7 @@ import DecryptContent from "./pages/DecryptContent";
 import EncryptContent from "./pages/EncryptContent";
 import EntryCreation from "./pages/EntryCreation";
 import EntryDecryption from "./pages/EntryDecryption";
+import EntryUpdate from "./pages/EntryUpdate";
 import Menu from "./pages/Menu";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Welcome from "./pages/Welcome";
@@ -23,6 +24,7 @@ function App() {
           <Route path="/decrypt" element={<DecryptContent />} />
           <Route path="/entries/create" element={<EntryCreation />} />
           <Route path="/entries/:id" element={<EntryDecryption />} />
+          <Route path="/entries/:id/update" element={<EntryUpdate />} />
         </Route>
       </Routes>
     </>

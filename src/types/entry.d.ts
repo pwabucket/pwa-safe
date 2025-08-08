@@ -18,3 +18,7 @@ export interface EntryFormData {
   type: Entry["type"];
   content: string | File | Blob;
 }
+
+export interface EntryUpdateFormData {
+  title: string;
+}
