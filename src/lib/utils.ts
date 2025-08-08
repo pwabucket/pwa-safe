@@ -2,7 +2,7 @@ import clsx, { type ClassValue } from "clsx";
 import JSZip from "jszip";
 import { twMerge } from "tailwind-merge";
 import type { EncryptionResult } from "./Encrypter";
-import type { EncryptedMetadata } from "../types/entry";
+import type { EncryptedMetadata, Entry } from "../types/entry";
 
 export const createMetadata = (
   type: "text" | "image" | "file",
@@ -84,6 +84,36 @@ export const extractZipFile = async (file: File) => {
   ]).then(([salt, encrypted]) => {
     return { salt, encrypted };
   });
+};
+
+export const extractZipBackup = async (file: File) => {
+  const zip = new JSZip();
+  const content = await file.arrayBuffer();
+  const unzipped = await zip.loadAsync(content);
+
+  const entries = (await unzipped.files["entries.json"]
+    .async("string")
+    .then((data) => JSON.parse(data))) as Entry[];
+
+  const vaultPromises = entries.map(async (entry: Entry) => {
+    return await Promise.all([
+      unzipped.files[`${entry.id}/key.salt`].async("string"),
+      unzipped.files[`${entry.id}/key.enc`].async("uint8array"),
+      unzipped.files[`${entry.id}/data.salt`].async("string"),
+      unzipped.files[`${entry.id}/data.enc`].async("uint8array"),
+    ]).then(([keySalt, keyEncrypted, dataSalt, dataEncrypted]) => ({
+      id: entry.id,
+      encryptedKey: { salt: keySalt, encrypted: keyEncrypted },
+      encryptedData: { salt: dataSalt, encrypted: dataEncrypted },
+    }));
+  });
+
+  const vaults = await Promise.all(vaultPromises);
+
+  return {
+    entries: entries,
+    vaults: vaults,
+  };
 };
 
 export const extractZipBundle = async (file: File) => {

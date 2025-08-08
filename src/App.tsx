@@ -7,6 +7,8 @@ import EncryptContent from "./pages/EncryptContent";
 import EntryCreation from "./pages/EntryCreation";
 import EntryDecryption from "./pages/EntryDecryption";
 import EntryUpdate from "./pages/EntryUpdate";
+import Export from "./pages/Export";
+import Import from "./pages/Import";
 import Menu from "./pages/Menu";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Welcome from "./pages/Welcome";
@@ -25,6 +27,8 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/menu" element={<Menu />} />
+          <Route path="/export" element={<Export />} />
+          <Route path="/import" element={<Import />} />
           <Route path="/encrypt" element={<EncryptContent />} />
           <Route path="/decrypt" element={<DecryptContent />} />
           <Route path="/entries/create" element={<EntryCreation />} />

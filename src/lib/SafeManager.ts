@@ -66,6 +66,16 @@ export default class SafeManager {
     await this.store.removeItem(`${id}:data`);
   }
 
+  async importEntries(entries: Array<EncryptedData & { id: string }>) {
+    for (const entry of entries) {
+      await this.storeEntry({
+        id: entry.id,
+        encryptedKey: entry.encryptedKey,
+        encryptedData: entry.encryptedData,
+      });
+    }
+  }
+
   async storeEntry({
     id,
     encryptedKey,

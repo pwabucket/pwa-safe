@@ -1,17 +1,14 @@
-import { Dialog } from "radix-ui";
 import { HiOutlineTrash } from "react-icons/hi2";
-import { ReactTyped } from "react-typed";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
-
 import Button from "../components/Button";
-import DialogContainer from "../components/DialogContainer";
 import InnerAppLayout from "../layouts/InnerAppLayout";
 import Input from "../components/Input";
 import useAppStore from "../store/useAppStore";
 import useDialogManager from "../hooks/useDialogManager";
 import type { Entry, EntryUpdateFormData } from "../types/entry";
 import { HeaderButton } from "../layouts/HeaderButton";
+import ProcessDialog from "../components/ProcessDialog";
 
 export default function EntryUpdate() {
   const dialogManager = useDialogManager();
@@ -71,38 +68,14 @@ export default function EntryUpdate() {
         <Button type="submit">Update Entry</Button>
       </form>
 
-      <Dialog.Root open={dialogManager.isDialogVisible}>
-        <DialogContainer onInteractOutside={(e) => e.preventDefault()}>
-          <div className="flex gap-2">
-            <div className="grow min-w-0">
-              <Dialog.Title className="text-xs uppercase text-green-300">
-                Date Log
-              </Dialog.Title>
-              <Dialog.Description className="sr-only">
-                Data Entry Update
-              </Dialog.Description>
-
-              <p className={"text-green-100"}>
-                {dialogManager.isProcessing ? (
-                  <>Processing...</>
-                ) : (
-                  <ReactTyped
-                    typeSpeed={20}
-                    strings={["Entry Updated Successfully!"]}
-                    onComplete={() =>
-                      new Promise((resolve) => setTimeout(resolve, 2000)).then(
-                        () =>
-                          navigate(`/entries/${entry?.id}`, { replace: true })
-                      )
-                    }
-                  />
-                )}
-              </p>
-            </div>
-            <div className="text-right text-green-400 text-sm">🛡️</div>
-          </div>
-        </DialogContainer>
-      </Dialog.Root>
+      <ProcessDialog
+        isOpen={dialogManager.isDialogVisible}
+        isProcessing={dialogManager.isProcessing}
+        onFinished={() => navigate(`/entries/${entry?.id}`, { replace: true })}
+        title="Data Log"
+        description="Entry Update"
+        successMessage="Entry Updated Successfully!"
+      />
     </InnerAppLayout>
   );
 }
