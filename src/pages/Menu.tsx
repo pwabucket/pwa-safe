@@ -15,21 +15,29 @@ export default function Menu() {
 
   return (
     <InnerAppLayout headerTitle="Menu" className="gap-4">
-      <Button as={Link} to="/encrypt">
-        Encrypt Content
+      <Button as={Link} to="/update-access-code">
+        Update Access Code
       </Button>
 
-      <Button as={Link} to="/decrypt">
-        Decrypt Content
-      </Button>
+      <div className="grid grid-cols-2 gap-2">
+        <Button as={Link} to="/encrypt">
+          Encrypt Content
+        </Button>
 
-      <Button as={Link} to="/export">
-        Export Entries
-      </Button>
+        <Button as={Link} to="/decrypt">
+          Decrypt Content
+        </Button>
+      </div>
 
-      <Button as={Link} to="/import">
-        Import Entries
-      </Button>
+      <div className="grid grid-cols-2 gap-2">
+        <Button as={Link} to="/export">
+          Export Entries
+        </Button>
+
+        <Button as={Link} to="/import">
+          Import Entries
+        </Button>
+      </div>
 
       <Button onClick={signOut}>Sign Out</Button>
 

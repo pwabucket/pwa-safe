@@ -76,6 +76,31 @@ export default class SafeManager {
     }
   }
 
+  async updateAccessCode({
+    id,
+    currentAccessCode,
+    newAccessCode,
+  }: {
+    id: string;
+    currentAccessCode: string;
+    newAccessCode: string;
+  }) {
+    const encryptedKey = (await this.getEncryptedKey(id)) as EncryptionResult;
+    const decryptedPassword = (await this.decrypt({
+      password: currentAccessCode,
+      encryptedData: encryptedKey.encrypted as Uint8Array,
+      salt: encryptedKey.salt,
+      asText: true,
+    })) as string;
+
+    const newEncryptedKey = await this.encrypt({
+      data: decryptedPassword,
+      password: newAccessCode,
+    });
+
+    await this.store.setItem(`${id}:key`, newEncryptedKey);
+  }
+
   async storeEntry({
     id,
     encryptedKey,

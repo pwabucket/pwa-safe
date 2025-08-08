@@ -34,11 +34,18 @@ export default function useDialogManager() {
     resetStatus();
   }, [resetStatus]);
 
+  const start = useCallback(() => {
+    showDialog();
+    resetStatus();
+    startProcessing();
+  }, [showDialog, resetStatus, startProcessing]);
+
   return {
     isDialogVisible,
     isProcessing,
     isSuccess,
     isError,
+    start,
     showDialog,
     hideDialog,
     startProcessing,

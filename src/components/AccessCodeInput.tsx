@@ -1,9 +1,6 @@
-import OTPInput from "react-otp-input";
 import { useCallback, useState } from "react";
-
-import Input from "./Input";
 import Keypad from "./Keypad";
-import { cn } from "../lib/utils";
+import AccessCodeOTPInput from "./AccessCodeOTPInput";
 
 export default function AccessCodeInput({
   onFilled,
@@ -39,18 +36,7 @@ export default function AccessCodeInput({
 
   return (
     <div className="flex flex-col gap-4">
-      <OTPInput
-        value={input}
-        onChange={updateInput}
-        numInputs={6}
-        inputType="password"
-        containerStyle={"flex gap-2"}
-        inputStyle={cn(
-          "basis-0 grow text-green-500  font-bold font-mono text-center",
-          "border-transparent bg-neutral-700 focus:border-green-500"
-        )}
-        renderInput={(props) => <Input {...props} />}
-      />
+      <AccessCodeOTPInput input={input} updateInput={updateInput} />
 
       <Keypad
         onInput={handleKeypadInput}

@@ -6,17 +6,21 @@ import DialogContainer from "./DialogContainer";
 export default function ProcessDialog({
   isOpen,
   isProcessing,
+  isError = false,
   onFinished,
   title,
   description,
-  successMessage,
+  successMessage = "Operation completed successfully!",
+  errorMessage = "Operation failed. Please try again.",
 }: {
   isOpen: boolean;
   isProcessing: boolean;
+  isError?: boolean;
   onFinished?: () => void;
   title?: string;
   description?: string;
   successMessage?: string;
+  errorMessage?: string;
 }) {
   return (
     <Dialog.Root open={isOpen}>
@@ -30,15 +34,13 @@ export default function ProcessDialog({
               {description}
             </Dialog.Description>
 
-            <p className={"text-green-100"}>
+            <p className={isError ? "text-red-100" : "text-green-100"}>
               {isProcessing ? (
                 <>Processing...</>
               ) : (
                 <ReactTyped
                   typeSpeed={20}
-                  strings={[
-                    successMessage || "Operation completed successfully!",
-                  ]}
+                  strings={[isError ? errorMessage : successMessage]}
                   onComplete={() =>
                     new Promise((resolve) => setTimeout(resolve, 2000)).then(
                       () => onFinished?.()

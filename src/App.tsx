@@ -13,6 +13,7 @@ import Menu from "./pages/Menu";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import TermsOfUse from "./pages/TermsOfUse";
+import UpdateAccessCode from "./pages/UpdateAccessCode";
 import Welcome from "./pages/Welcome";
 import useInactivity from "./hooks/useInactivity";
 
@@ -42,6 +43,8 @@ function App() {
           <Route path="/entries/create" element={<EntryCreation />} />
           <Route path="/entries/:id" element={<EntryDecryption />} />
           <Route path="/entries/:id/update" element={<EntryUpdate />} />
+
+          <Route path="/update-access-code" element={<UpdateAccessCode />} />
         </Route>
       </Routes>
     </>
