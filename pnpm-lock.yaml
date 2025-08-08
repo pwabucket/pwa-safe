@@ -38,6 +38,9 @@ importers:
       copy-to-clipboard:
         specifier: ^3.3.3
         version: 3.3.3
+      howler:
+        specifier: ^2.2.4
+        version: 2.2.4
       jszip:
         specifier: ^3.10.1
         version: 3.10.1
