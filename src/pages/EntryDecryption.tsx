@@ -12,7 +12,7 @@ import useAppStore from "../store/useAppStore";
 import type { Entry } from "../types/entry";
 import { zipAndDownloadBundle } from "../lib/utils";
 
-export default function EntryDecrypt() {
+export default function EntryDecryption() {
   const accessCode = useAccessCode();
   const params = useParams();
   if (!params.id) {

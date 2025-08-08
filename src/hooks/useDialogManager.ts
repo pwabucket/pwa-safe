@@ -12,26 +12,27 @@ export default function useDialogManager() {
   const stopProcessing = useCallback(() => setIsProcessing(false), []);
 
   const markAsFailed = useCallback(() => {
+    setIsProcessing(false);
     setIsError(true);
     setIsSuccess(false);
   }, []);
 
   const markAsSuccess = useCallback(() => {
+    setIsProcessing(false);
     setIsSuccess(true);
     setIsError(false);
   }, []);
 
   const resetStatus = useCallback(() => {
+    setIsProcessing(false);
     setIsSuccess(false);
     setIsError(false);
   }, []);
 
   const resetDialogState = useCallback(() => {
     setIsDialogVisible(false);
-    setIsProcessing(false);
-    setIsSuccess(false);
-    setIsError(false);
-  }, []);
+    resetStatus();
+  }, [resetStatus]);
 
   return {
     isDialogVisible,
