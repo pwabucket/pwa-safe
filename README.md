@@ -9,6 +9,7 @@ Features:
 
 - Encryption & Decryption
 - Import & Export
+- Google Drive Sync (Coming..)
 
 <p align="center">
   <img src="/public/screenshot-mobile-1.jpg" width="32%" />
