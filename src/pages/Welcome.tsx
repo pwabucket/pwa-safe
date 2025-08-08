@@ -95,7 +95,7 @@ function Welcome() {
     showDialog,
     hideDialog,
     startProcessing,
-    stopProcessing,
+    markValidAccessCode,
     markInvalidAccessCode,
   } = useAccessCodeDialogManager();
 
@@ -107,17 +107,18 @@ function Welcome() {
       startProcessing();
 
       const passed = await verifyAccessCode(code);
+
       await new Promise((resolve) => setTimeout(resolve, 500));
-      stopProcessing();
-      if (!passed) {
+      if (passed) {
+        markValidAccessCode();
+      } else {
         markInvalidAccessCode();
-        return;
       }
     },
     [
       showDialog,
       startProcessing,
-      stopProcessing,
+      markValidAccessCode,
       markInvalidAccessCode,
       verifyAccessCode,
     ]

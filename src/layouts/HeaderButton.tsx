@@ -16,13 +16,14 @@ export function HeaderButton<T extends React.ElementType = "button">({
 }) {
   const Component = as || "button";
   const Icon = icon;
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<Element | null>(null);
 
   useButtonClick(ref);
 
   return (
     <Component
       {...props}
+      ref={ref}
       className={cn(
         "group",
         "cursor-pointer outline-none",

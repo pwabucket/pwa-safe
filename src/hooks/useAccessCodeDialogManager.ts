@@ -5,6 +5,7 @@ export default function useAccessCodeDialogManager() {
     isDialogVisible,
     isProcessing,
     isError: isInvalidAccessCode,
+    markAsSuccess: markValidAccessCode,
     markAsFailed: markInvalidAccessCode,
     resetDialogState: resetInvalidAccessCode,
     showDialog,
@@ -21,6 +22,7 @@ export default function useAccessCodeDialogManager() {
     hideDialog,
     startProcessing,
     stopProcessing,
+    markValidAccessCode,
     markInvalidAccessCode,
     resetInvalidAccessCode,
   };
