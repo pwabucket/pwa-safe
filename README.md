@@ -1,3 +1,6 @@
+[![Open App](https://img.shields.io/badge/Open%20App-grey?style=for-the-badge&logo=googlechrome&logoColor=00ffcc)](https://safe.pwabucket.com) [![Open in Store](https://img.shields.io/badge/Open-in%20Store-9c27b0?style=for-the-badge&logo=pwa&logoColor=white)](https://pwabucket.com/apps/pwa-safe)
+
+
 # Safe
 
 Secure vault for your secrets and sensitive data.
