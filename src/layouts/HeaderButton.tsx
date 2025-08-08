@@ -1,6 +1,8 @@
 import { HiOutlineArrowLeft } from "react-icons/hi2";
+import { useRef } from "react";
 
 import Borders from "../components/Borders";
+import useButtonClick from "../hooks/useButtonClick";
 import useNavigateBack from "../hooks/useNavigateBack";
 import type { DynamicComponentProps } from "../types/types";
 import { cn } from "../lib/utils";
@@ -14,6 +16,9 @@ export function HeaderButton<T extends React.ElementType = "button">({
 }) {
   const Component = as || "button";
   const Icon = icon;
+  const ref = useRef<HTMLElement>(null);
+
+  useButtonClick(ref);
 
   return (
     <Component
