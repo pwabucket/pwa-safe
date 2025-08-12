@@ -7,8 +7,8 @@ import { cn } from "../lib/utils";
 
 const Button: DynamicComponent<
   "button",
-  { variant?: "primary" | "danger" }
-> = ({ as, variant = "primary", ...props }) => {
+  { variant?: "primary" | "danger"; borders?: boolean }
+> = ({ as, variant = "primary", borders = true, ...props }) => {
   const Component = as || "button";
   const ref = useRef<HTMLElement | null>(null);
 
@@ -35,14 +35,16 @@ const Button: DynamicComponent<
         props.className
       )}
     >
-      <Borders
-        className={cn(
-          {
-            primary: "border-green-500",
-            danger: "border-red-500",
-          }[variant]
-        )}
-      />
+      {borders && (
+        <Borders
+          className={cn(
+            {
+              primary: "border-green-500",
+              danger: "border-red-500",
+            }[variant]
+          )}
+        />
+      )}
       {props.children}
     </Component>
   );
