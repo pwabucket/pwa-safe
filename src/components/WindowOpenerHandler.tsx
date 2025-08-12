@@ -123,45 +123,47 @@ export default function WindowOpenerHandler() {
 
   return (
     <>
-      <Dialog.Root open={!!openerData} onOpenChange={() => setOpenerData(null)}>
-        <DialogContainer>
-          {/* Dialog Header */}
-          <div className="flex gap-4 items-start">
-            <div className="grow min-w-0">
-              <Dialog.Title>Encrypt Data</Dialog.Title>
-              <Dialog.Description className="text-sm text-green-100">
-                {processManager.isSuccess
-                  ? "Status"
-                  : "Add a new entry to your vault."}
-              </Dialog.Description>
+      {openerData ? (
+        <Dialog.Root defaultOpen onOpenChange={() => setOpenerData(null)}>
+          <DialogContainer>
+            {/* Dialog Header */}
+            <div className="flex gap-4 items-start">
+              <div className="grow min-w-0">
+                <Dialog.Title>Encrypt Data</Dialog.Title>
+                <Dialog.Description className="text-sm text-green-100">
+                  {processManager.isSuccess
+                    ? "Status"
+                    : "Add a new entry to your vault."}
+                </Dialog.Description>
+              </div>
+              <Dialog.Close
+                disabled={processManager.isProcessing}
+                className="text-green-200 p-2 cursor-pointer border border-green-500"
+              >
+                <HiOutlineXMark className="size-5" />
+              </Dialog.Close>
             </div>
-            <Dialog.Close
-              disabled={processManager.isProcessing}
-              className="text-green-200 p-2 cursor-pointer border border-green-500"
-            >
-              <HiOutlineXMark className="size-5" />
-            </Dialog.Close>
-          </div>
 
-          {processManager.isSuccess ? (
-            <ReactTyped
-              typeSpeed={20}
-              strings={["Entry Created Successfully!"]}
-              onComplete={() =>
-                new Promise((resolve) => setTimeout(resolve, 2000)).then(() =>
-                  navigate(`/entries/${entry?.id}`)
-                )
-              }
-            />
-          ) : (
-            <WindowOpenerForm
-              content={openerData?.content as File}
-              isProcessing={processManager.isProcessing}
-              onSubmit={handleSubmit}
-            />
-          )}
-        </DialogContainer>
-      </Dialog.Root>
+            {processManager.isSuccess ? (
+              <ReactTyped
+                typeSpeed={20}
+                strings={["Entry Created Successfully!"]}
+                onComplete={() =>
+                  new Promise((resolve) => setTimeout(resolve, 2000)).then(() =>
+                    navigate(`/entries/${entry?.id}`)
+                  )
+                }
+              />
+            ) : (
+              <WindowOpenerForm
+                content={openerData!.content as File}
+                isProcessing={processManager.isProcessing}
+                onSubmit={handleSubmit}
+              />
+            )}
+          </DialogContainer>
+        </Dialog.Root>
+      ) : null}
     </>
   );
 }
