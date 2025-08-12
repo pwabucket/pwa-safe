@@ -1,4 +1,8 @@
-import { HiOutlineBars3, HiOutlinePlus } from "react-icons/hi2";
+import {
+  HiOutlineBars3,
+  HiOutlineExclamationTriangle,
+  HiOutlinePlus,
+} from "react-icons/hi2";
 import { Link } from "react-router";
 import { ReactTyped } from "react-typed";
 import { Reorder } from "motion/react";
@@ -53,7 +57,15 @@ export default function Dashboard() {
           </p>
         ) : (
           <>
+            <div className="bg-green-500/5 text-green-500 p-4 flex gap-2">
+              <HiOutlineExclamationTriangle className="size-8 shrink-0" />
+              <p className="text-sm">
+                All entries are stored within your browser. Ensure to back them
+                up manually.
+              </p>
+            </div>
             <Input
+              name="search-entry"
               placeholder="Search entries..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
