@@ -77,7 +77,7 @@ export default function EntryForm({
                   {...field}
                   value={field.value as string}
                   placeholder="Content"
-                  rows={4}
+                  minRows={4}
                 />
                 {fieldState.error && (
                   <span className="text-red-200 text-sm">
