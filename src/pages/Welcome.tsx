@@ -7,7 +7,7 @@ import AccessCodeDialog from "../components/AccessCodeDialog";
 import AccessCodeInput from "../components/AccessCodeInput";
 import Button from "../components/Button";
 import DialogContainer from "../components/DialogContainer";
-import SafeManager from "../lib/SafeManager";
+import safe from "../services/safe";
 import useAccessCodeDialogManager from "../hooks/useAccessCodeDialogManager";
 import useAppStore from "../store/useAppStore";
 import useDialogManager from "../hooks/useDialogManager";
@@ -23,8 +23,7 @@ const ResetSafe = ({
 
   const handleReset = async () => {
     dialogManager.startProcessing();
-    const safeManager = new SafeManager();
-    await safeManager.clearEntries();
+    await safe.clearEntries();
     clearEntries();
     resetAccessCode();
     dialogManager.stopProcessing();

@@ -1,11 +1,10 @@
 import { useNavigate } from "react-router";
 import { useState } from "react";
-
 import AccessCodeOTPInput from "../components/AccessCodeOTPInput";
 import Button from "../components/Button";
 import InnerAppLayout from "../layouts/InnerAppLayout";
 import ProcessDialog from "../components/ProcessDialog";
-import SafeManager from "../lib/SafeManager";
+import safe from "../services/safe";
 import useAppStore from "../store/useAppStore";
 import useDialogManager from "../hooks/useDialogManager";
 
@@ -25,10 +24,9 @@ export default function UpdateAccessCode() {
     const isValid = await verifyAccessCode(currentAccessCode);
 
     if (isValid) {
-      const safeManager = new SafeManager();
       await Promise.all(
         entries.map((entry) =>
-          safeManager.updateAccessCode({
+          safe.updateAccessCode({
             id: entry.id,
             currentAccessCode,
             newAccessCode,

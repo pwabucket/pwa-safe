@@ -1,11 +1,10 @@
 import type { SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useState } from "react";
-
 import EntryForm from "../components/EntryForm";
 import InnerAppLayout from "../layouts/InnerAppLayout";
 import ProcessDialog from "../components/ProcessDialog";
-import SafeManager from "../lib/SafeManager";
+import safe from "../services/safe";
 import useAccessCode from "../hooks/useAccessCode";
 import useAppStore from "../store/useAppStore";
 import useDialogManager from "../hooks/useDialogManager";
@@ -28,8 +27,7 @@ export default function EntryCreation() {
         ? data.content.arrayBuffer()
         : data.content;
     const dataToEncrypt = await content;
-    const safeManager = new SafeManager();
-    const result = await safeManager.createEntry({
+    const result = await safe.createEntry({
       accessCode: accessCode as string,
       content: dataToEncrypt,
     });

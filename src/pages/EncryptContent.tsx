@@ -3,13 +3,14 @@ import { useCallback, useState } from "react";
 import Button from "../components/Button";
 import EntryForm from "../components/EntryForm";
 import InnerAppLayout from "../layouts/InnerAppLayout";
-import SafeManager, { type EncryptedData } from "../lib/SafeManager";
+import { type EncryptedData } from "../lib/SafeManager";
 import type { EncryptionResult } from "../lib/Encrypter";
 import type { EncryptedMetadata, EntryFormData } from "../types/entry";
 import { createMetadata, uuid, zipAndDownloadBundle } from "../lib/utils";
 import { ReactTyped } from "react-typed";
 import AccessCodePrompt from "../components/AccessCodePrompt";
 import useDialogManager from "../hooks/useDialogManager";
+import safe from "../services/safe";
 
 export default function EncryptContent() {
   const dialogManager = useDialogManager();
@@ -35,8 +36,7 @@ export default function EncryptContent() {
           ? data.content.arrayBuffer()
           : data.content;
       const dataToEncrypt = await content;
-      const safeManager = new SafeManager();
-      const result = await safeManager.createEncryption({
+      const result = await safe.createEncryption({
         accessCode,
         content: dataToEncrypt,
       });

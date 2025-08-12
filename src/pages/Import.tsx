@@ -6,7 +6,7 @@ import Card from "../components/Card";
 import FileDropzone from "../components/FileDropzone";
 import InnerAppLayout from "../layouts/InnerAppLayout";
 import ProcessDialog from "../components/ProcessDialog";
-import SafeManager from "../lib/SafeManager";
+import safe from "../services/safe";
 import useAppStore from "../store/useAppStore";
 import useDialogManager from "../hooks/useDialogManager";
 import { extractZipBackup } from "../lib/utils";
@@ -26,10 +26,9 @@ export default function Import() {
     dialogManager.showDialog();
     dialogManager.startProcessing();
 
-    const safeManager = new SafeManager();
     const { entries, vaults } = await extractZipBackup(importFile);
 
-    await safeManager.importEntries(vaults);
+    await safe.importEntries(vaults);
     await importEntries(entries);
 
     dialogManager.markAsSuccess();

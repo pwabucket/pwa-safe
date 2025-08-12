@@ -2,12 +2,11 @@ import { HiOutlinePencil } from "react-icons/hi2";
 import { Link, useParams } from "react-router";
 import { ReactTyped } from "react-typed";
 import { useState } from "react";
-
 import Button from "../components/Button";
 import Card from "../components/Card";
 import DecryptedContent from "../components/DecryptedContent";
 import InnerAppLayout from "../layouts/InnerAppLayout";
-import SafeManager from "../lib/SafeManager";
+import safe from "../services/safe";
 import useAccessCode from "../hooks/useAccessCode";
 import useAppStore from "../store/useAppStore";
 import type { Entry } from "../types/entry";
@@ -28,8 +27,7 @@ export default function EntryDecryption() {
   const [content, setContent] = useState<string | Blob | File>("");
 
   const handleDecrypt = async () => {
-    const manager = new SafeManager();
-    const decrypted = await manager.decryptEntry({
+    const decrypted = await safe.decryptEntry({
       id: entryId,
       accessCode: accessCode as string,
     });
@@ -47,8 +45,7 @@ export default function EntryDecryption() {
 
   /** Download Bundle */
   const downloadBundle = async () => {
-    const manager = new SafeManager();
-    const result = await manager.getEntry(entryId);
+    const result = await safe.getEntry(entryId);
 
     zipAndDownloadBundle({
       filename: entry?.id as string,

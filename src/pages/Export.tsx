@@ -1,14 +1,15 @@
 import JSZip from "jszip";
 import { ReactTyped } from "react-typed";
 import { useState } from "react";
+
 import Button from "../components/Button";
 import Card from "../components/Card";
 import InnerAppLayout from "../layouts/InnerAppLayout";
-import SafeManager from "../lib/SafeManager";
+import ProcessDialog from "../components/ProcessDialog";
+import safe from "../services/safe";
 import useAppStore from "../store/useAppStore";
 import useDialogManager from "../hooks/useDialogManager";
 import { downloadFile } from "../lib/utils";
-import ProcessDialog from "../components/ProcessDialog";
 
 export default function Export() {
   const dialogManager = useDialogManager();
@@ -19,12 +20,11 @@ export default function Export() {
     dialogManager.showDialog();
     dialogManager.startProcessing();
 
-    const safeManager = new SafeManager();
     const zip = new JSZip();
 
     await Promise.all(
       entries.map(async (entry) => {
-        const vault = await safeManager.getEntry(entry.id);
+        const vault = await safe.getEntry(entry.id);
 
         /** Encrypted key files */
         zip.file(`${entry.id}/key.salt`, vault.encryptedKey.salt);

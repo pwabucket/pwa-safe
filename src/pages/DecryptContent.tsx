@@ -1,7 +1,6 @@
 import { type SubmitHandler } from "react-hook-form";
 import { useCallback, useState } from "react";
 import InnerAppLayout from "../layouts/InnerAppLayout";
-import SafeManager from "../lib/SafeManager";
 import { extractZipBundle } from "../lib/utils";
 import DecryptionForm, {
   type DecryptionFormData,
@@ -10,6 +9,7 @@ import AccessCodePrompt from "../components/AccessCodePrompt";
 import useDialogManager from "../hooks/useDialogManager";
 import type { EncryptedMetadata } from "../types/entry";
 import DecryptedContent from "../components/DecryptedContent";
+import safe from "../services/safe";
 
 export default function DecryptContent() {
   const dialogManager = useDialogManager();
@@ -33,8 +33,7 @@ export default function DecryptContent() {
         const { metadata, encryptedKey, encryptedData } =
           await extractZipBundle(data.encryptedBundle);
 
-        const safeManager = new SafeManager();
-        const decrypted = await safeManager.decryptContent({
+        const decrypted = await safe.decryptContent({
           encryptedData,
           encryptedKey,
           accessCode,
