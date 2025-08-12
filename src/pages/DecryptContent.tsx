@@ -26,34 +26,39 @@ export default function DecryptContent() {
 
   const decryptContent = useCallback(
     async (accessCode: string) => {
-      const data = formData as DecryptionFormData;
-      const { metadata, encryptedKey, encryptedData } = await extractZipBundle(
-        data.encryptedBundle
-      );
+      dialogManager.startProcessing();
 
-      const safeManager = new SafeManager();
-      const decrypted = await safeManager.decryptContent({
-        encryptedData,
-        encryptedKey,
-        accessCode,
-      });
+      try {
+        const data = formData as DecryptionFormData;
+        const { metadata, encryptedKey, encryptedData } =
+          await extractZipBundle(data.encryptedBundle);
 
-      const result =
-        metadata.type === "text"
-          ? new TextDecoder().decode(decrypted)
-          : new File([decrypted], metadata.filename as string, {
-              type: metadata.filetype as string,
-              lastModified: metadata.fileLastModified,
-            });
+        const safeManager = new SafeManager();
+        const decrypted = await safeManager.decryptContent({
+          encryptedData,
+          encryptedKey,
+          accessCode,
+        });
 
-      setResult({
-        metadata,
-        data: result,
-      });
+        const result =
+          metadata.type === "text"
+            ? new TextDecoder().decode(decrypted)
+            : new File([decrypted], metadata.filename as string, {
+                type: metadata.filetype as string,
+                lastModified: metadata.fileLastModified,
+              });
 
-      setFormData(null);
+        setResult({
+          metadata,
+          data: result,
+        });
 
-      dialogManager.resetDialogState();
+        setFormData(null);
+
+        dialogManager.markAsSuccess();
+      } catch {
+        dialogManager.markAsFailed();
+      }
     },
     [formData, dialogManager]
   );

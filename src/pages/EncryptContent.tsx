@@ -27,6 +27,8 @@ export default function EncryptContent() {
 
   const encryptContent = useCallback(
     async (accessCode: string) => {
+      dialogManager.startProcessing();
+
       const data = formData as EntryFormData;
       const content =
         data.content instanceof File || data.content instanceof Blob
@@ -49,7 +51,7 @@ export default function EncryptContent() {
 
       setFormData(null);
 
-      dialogManager.resetDialogState();
+      dialogManager.markAsSuccess();
     },
     [formData, dialogManager]
   );
