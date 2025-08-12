@@ -167,7 +167,7 @@ function Welcome() {
 
           <button
             onClick={resetDialog.showDialog}
-            className="text-xs text-green-100 mt-4 cursor-pointer"
+            className="text-xs text-green-100 cursor-pointer p-1"
           >
             INITIATE VOID SEQUENCE
           </button>
@@ -179,6 +179,10 @@ function Welcome() {
           </Button>
         </>
       )}
+
+      <p className="text-center text-green-300 text-xs">
+        v{import.meta.env.PACKAGE_VERSION}
+      </p>
 
       <ResetSafe dialogManager={resetDialog} />
     </div>
