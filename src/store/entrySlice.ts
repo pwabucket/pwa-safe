@@ -17,7 +17,7 @@ export const createEntrySlice: StateCreator<EntrySlice> = (set) => ({
   setEntries: (entries) => set({ entries }),
   addEntry: (entry) =>
     set((state) => ({
-      entries: [...state.entries, entry],
+      entries: [entry, ...state.entries],
     })),
   removeEntry: (entryId) =>
     set((state) => ({
@@ -32,10 +32,10 @@ export const createEntrySlice: StateCreator<EntrySlice> = (set) => ({
   importEntries: (entries) =>
     set((state) => ({
       entries: [
-        ...state.entries,
         ...entries.filter(
           (item) => !state.entries.some((entry) => entry.id === item.id)
         ),
+        ...state.entries,
       ],
     })),
   clearEntries: () => set({ entries: [] }),
