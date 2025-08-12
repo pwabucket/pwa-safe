@@ -1,6 +1,7 @@
 import type { SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+
 import EntryForm from "../components/EntryForm";
 import InnerAppLayout from "../layouts/InnerAppLayout";
 import ProcessDialog from "../components/ProcessDialog";
@@ -29,7 +30,7 @@ export default function EntryCreation() {
     const dataToEncrypt = await content;
     const result = await safe.createEntry({
       accessCode: accessCode as string,
-      content: dataToEncrypt,
+      content: dataToEncrypt!,
     });
 
     const entry: Entry = {
@@ -37,7 +38,7 @@ export default function EntryCreation() {
       title: data.title as string,
       createdAt: Date.now(),
       updatedAt: Date.now(),
-      ...createMetadata(data.type, data.content),
+      ...createMetadata(data.type, data.content!),
     };
 
     addEntry(entry);

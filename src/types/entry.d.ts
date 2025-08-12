@@ -16,7 +16,7 @@ export type Entry = {
 export interface EntryFormData {
   title?: string;
   type: Entry["type"];
-  content: string | File | Blob;
+  content: string | File | Blob | null;
 }
 
 export interface EntryUpdateFormData {

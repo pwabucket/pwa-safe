@@ -34,14 +34,14 @@ export default function EncryptContent() {
       const content =
         data.content instanceof File || data.content instanceof Blob
           ? data.content.arrayBuffer()
-          : data.content;
+          : data.content!;
       const dataToEncrypt = await content;
       const result = await safe.createEncryption({
         accessCode,
         content: dataToEncrypt,
       });
 
-      const metadata = createMetadata(data.type, data.content);
+      const metadata = createMetadata(data.type, data.content!);
 
       setResult({
         id: uuid(),
