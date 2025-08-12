@@ -1,5 +1,6 @@
 import { Dialog } from "radix-ui";
 import { HiOutlineXMark } from "react-icons/hi2";
+import { ReactTyped } from "react-typed";
 
 import AccessCodeInput from "./AccessCodeInput";
 import Button from "./Button";
@@ -17,6 +18,21 @@ export default function AccessCodePrompt({
   onAccessCode: (code: string) => void;
 }) {
   const accessCode = useAccessCode();
+  const hasResult = dialogManager.isSuccess || dialogManager.isError;
+  const processingDescription =
+    mode === "encrypt"
+      ? "Encrypting your content..."
+      : "Decrypting your content...";
+
+  const dialogTitle =
+    hasResult || dialogManager.isProcessing ? "Agent Log" : "Access Code";
+
+  const dialogDescription = hasResult
+    ? "Status Update"
+    : dialogManager.isProcessing
+    ? processingDescription
+    : `Enter an access code to ${mode} your content.`;
+
   return (
     <Dialog.Root
       open={dialogManager.isDialogVisible}
@@ -28,21 +44,47 @@ export default function AccessCodePrompt({
       >
         <div className="flex gap-4 items-start">
           <div className="grow min-w-0">
-            <Dialog.Title>Access Code</Dialog.Title>
+            <Dialog.Title>{dialogTitle}</Dialog.Title>
             <Dialog.Description className="text-sm text-green-100">
-              Enter an access code to {mode} your content.
+              {dialogDescription}
             </Dialog.Description>
           </div>
 
-          <Dialog.Close className="text-green-200 p-2 bg-neutral-700 cursor-pointer">
+          <Dialog.Close
+            disabled={dialogManager.isProcessing}
+            className="text-green-200 p-2 bg-neutral-700 cursor-pointer"
+          >
             <HiOutlineXMark className="size-5" />
           </Dialog.Close>
         </div>
 
-        <Button onClick={() => onAccessCode(accessCode as string)}>
-          Use Current
-        </Button>
-        <AccessCodeInput onFilled={(code) => onAccessCode(code)} />
+        {hasResult ? (
+          <ReactTyped
+            className={
+              dialogManager.isSuccess ? "text-green-100" : "text-red-100"
+            }
+            typeSpeed={20}
+            strings={
+              dialogManager.isSuccess
+                ? ["Operation Successful!"]
+                : ["Operation Failed!"]
+            }
+            onComplete={() =>
+              new Promise((resolve) => setTimeout(resolve, 2000)).then(() =>
+                dialogManager.isSuccess
+                  ? dialogManager.resetDialogState()
+                  : dialogManager.resetStatus()
+              )
+            }
+          />
+        ) : !dialogManager.isProcessing ? (
+          <>
+            <Button onClick={() => onAccessCode(accessCode as string)}>
+              Use Current
+            </Button>
+            <AccessCodeInput onFilled={(code) => onAccessCode(code)} />
+          </>
+        ) : null}
       </DialogContainer>
     </Dialog.Root>
   );
