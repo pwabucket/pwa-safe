@@ -13,14 +13,14 @@ export default function ProcessDialog({
   successMessage = "Operation completed successfully!",
   errorMessage = "Operation failed. Please try again.",
 }: {
-  isOpen: boolean;
-  isProcessing: boolean;
-  isError?: boolean;
-  onFinished?: () => void;
   title?: string;
   description?: string;
   successMessage?: string;
   errorMessage?: string;
+  isOpen: boolean;
+  isProcessing: boolean;
+  isError?: boolean;
+  onFinished?: () => void;
 }) {
   return (
     <Dialog.Root open={isOpen}>
