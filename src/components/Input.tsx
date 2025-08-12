@@ -9,6 +9,7 @@ const Input: DynamicComponent<"input"> = ({ as, ...props }) => {
       className={cn(
         "p-2 text-green-100",
         "border border-green-500 focus:outline-0 focus:bg-neutral-700",
+        "disabled:opacity-50",
         props.className
       )}
     />

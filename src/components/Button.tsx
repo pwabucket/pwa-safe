@@ -21,6 +21,7 @@ const Button: DynamicComponent<
       className={cn(
         "cursor-pointer outline-none",
         "relative border px-4 py-2",
+        "disabled:opacity-50",
         {
           primary: [
             "text-green-500 border-green-500",
