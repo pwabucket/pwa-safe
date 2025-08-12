@@ -2,13 +2,16 @@ import { HiOutlinePencil } from "react-icons/hi2";
 import { Link, useParams } from "react-router";
 import { ReactTyped } from "react-typed";
 import { useState } from "react";
+
 import Button from "../components/Button";
 import Card from "../components/Card";
 import DecryptedContent from "../components/DecryptedContent";
 import InnerAppLayout from "../layouts/InnerAppLayout";
+import ProcessDialog from "../components/ProcessDialog";
 import safe from "../services/safe";
 import useAccessCode from "../hooks/useAccessCode";
 import useAppStore from "../store/useAppStore";
+import useDialogManager from "../hooks/useDialogManager";
 import type { Entry } from "../types/entry";
 import { HeaderButton } from "../layouts/HeaderButton";
 import { zipAndDownloadBundle } from "../lib/utils";
@@ -26,21 +29,30 @@ export default function EntryDecryption() {
 
   const [content, setContent] = useState<string | Blob | File>("");
 
+  const dialogManager = useDialogManager();
+
   const handleDecrypt = async () => {
-    const decrypted = await safe.decryptEntry({
-      id: entryId,
-      accessCode: accessCode as string,
-    });
+    dialogManager.start();
+    try {
+      const decrypted = await safe.decryptEntry({
+        id: entryId,
+        accessCode: accessCode as string,
+      });
 
-    const result =
-      entry.type === "text"
-        ? new TextDecoder().decode(decrypted)
-        : new File([decrypted], entry.filename as string, {
-            type: entry.filetype as string,
-            lastModified: entry.fileLastModified,
-          });
+      const result =
+        entry.type === "text"
+          ? new TextDecoder().decode(decrypted)
+          : new File([decrypted], entry.filename as string, {
+              type: entry.filetype as string,
+              lastModified: entry.fileLastModified,
+            });
 
-    setContent(result);
+      setContent(result);
+      dialogManager.markAsSuccess();
+    } catch (error) {
+      console.error("Decryption failed:", error);
+      dialogManager.markAsFailed();
+    }
   };
 
   /** Download Bundle */
@@ -86,6 +98,17 @@ export default function EntryDecryption() {
       ) : (
         <Button onClick={handleDecrypt}>Decrypt Data</Button>
       )}
+
+      <ProcessDialog
+        title="Decrypt Entry"
+        description="Decrypting your entry..."
+        successMessage="Entry decrypted successfully!"
+        errorMessage="Failed to decrypt entry. Please try again."
+        isError={dialogManager.isError}
+        isOpen={dialogManager.isDialogVisible}
+        isProcessing={dialogManager.isProcessing}
+        onFinished={dialogManager.hideDialog}
+      />
     </InnerAppLayout>
   );
 }
