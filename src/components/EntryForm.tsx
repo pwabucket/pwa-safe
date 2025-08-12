@@ -1,85 +1,16 @@
+import { Controller, useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import { Tabs } from "radix-ui";
-import { useDropzone, type DropzoneOptions } from "react-dropzone";
-import { useForm } from "react-hook-form";
 
 import Button from "./Button";
 import Input from "./Input";
 import Textarea from "./Textarea";
 import type { Entry, EntryFormData } from "../types/entry";
-import { cn } from "../lib/utils";
-import Card from "./Card";
-import { memo } from "react";
-
-const TabTriggerButton = (props: React.ComponentProps<typeof Tabs.Trigger>) => (
-  <Tabs.Trigger
-    {...props}
-    className={cn(
-      "cursor-pointer text-sm p-2",
-      "border border-transparent",
-      "data-[state=active]:border-green-500",
-      "data-[state=active]:text-green-500"
-    )}
-  />
-);
-
-const TabContent = (props: React.ComponentProps<typeof Tabs.Content>) => (
-  <Tabs.Content {...props} className="flex flex-col gap-4">
-    {props.children}
-  </Tabs.Content>
-);
-
-const Dropzone = ({
-  type = "file",
-  ...props
-}: DropzoneOptions & { type?: "file" | "image" }) => {
-  /** Dropzone */
-  const { getRootProps, getInputProps, isDragActive } = useDropzone(props);
-
-  return (
-    <Card {...getRootProps()} className="text-sm text-center py-6">
-      <input {...getInputProps()} />
-      {isDragActive ? (
-        <p>Drop the {type} here ...</p>
-      ) : (
-        <p>
-          Drag 'n' drop the {type} here, or click to select {type}
-        </p>
-      )}
-    </Card>
-  );
-};
-
-const ImageContent = memo(({ content }: { content: File }) => {
-  return (
-    <Card className="flex flex-col gap-2">
-      <img
-        src={URL.createObjectURL(content)}
-        onLoad={(e) => {
-          URL.revokeObjectURL((e.target as HTMLImageElement).src);
-        }}
-        alt="Preview"
-        className="w-full max-h-96 object-contain"
-      />
-      <span className="text-sm text-center text-green-100 truncate">
-        {content.name}
-      </span>
-    </Card>
-  );
-});
-
-const FileContent = memo(({ content }: { content: File }) => {
-  return (
-    <Card className="flex flex-col gap-2">
-      <span className="text-sm text-center text-green-100 truncate">
-        {content.name}
-      </span>
-      <span className="text-xs text-center text-green-500 truncate">
-        {content.type}
-      </span>
-    </Card>
-  );
-});
+import { EntryFormDropzone } from "./EntryFormDropzone";
+import { EntryFormFileContent } from "./EntryFormFileContent";
+import { EntryFormImageContent } from "./EntryFormImageContent";
+import { EntryFormTabContent } from "./EntryFormTabContent";
+import { EntryFormTabTriggerButton } from "./EntryFormTabTriggerButton";
 
 export default function EntryForm({
   disableTitle = false,
@@ -88,27 +19,33 @@ export default function EntryForm({
   disableTitle?: boolean;
   onSubmit: SubmitHandler<EntryFormData>;
 }) {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    resetField,
-    formState: { errors },
-  } = useForm<EntryFormData>({ defaultValues: { type: "text" } });
+  const { control, handleSubmit, watch, setValue } = useForm<EntryFormData>({
+    defaultValues: { type: "text", content: "" },
+  });
 
   const type = watch("type");
-  const content = watch("content");
 
-  const handleTypeChange = (value: Entry["type"]) => {
-    setValue("type", value);
-    resetField("content");
+  const handleTypeChange = (formEntryType: Entry["type"]) => {
+    setValue("content", formEntryType === "text" ? "" : null);
+    setValue("type", formEntryType);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       {!disableTitle && (
-        <Input placeholder="Title" {...register("title", { required: true })} />
+        <Controller
+          name="title"
+          control={control}
+          rules={{ required: true }}
+          render={({ field, fieldState }) => (
+            <>
+              <Input placeholder="Title" {...field} />
+              {fieldState.error && (
+                <span className="text-red-200 text-sm">Title is required</span>
+              )}
+            </>
+          )}
+        />
       )}
 
       <Tabs.Root
@@ -117,57 +54,103 @@ export default function EntryForm({
         className="w-full flex flex-col gap-4"
       >
         <Tabs.List className="grid grid-cols-3 gap-2">
-          <TabTriggerButton value="text">Text</TabTriggerButton>
-          <TabTriggerButton value="image">Image</TabTriggerButton>
-          <TabTriggerButton value="file">File</TabTriggerButton>
+          <EntryFormTabTriggerButton value="text">
+            Text
+          </EntryFormTabTriggerButton>
+          <EntryFormTabTriggerButton value="image">
+            Image
+          </EntryFormTabTriggerButton>
+          <EntryFormTabTriggerButton value="file">
+            File
+          </EntryFormTabTriggerButton>
         </Tabs.List>
 
         {/* Text */}
-        <TabContent value="text">
-          <Textarea
-            {...register("content", { required: true })}
-            placeholder="Content"
-            rows={4}
+        <EntryFormTabContent value="text">
+          <Controller
+            name="content"
+            control={control}
+            rules={{ required: true }}
+            render={({ field, fieldState }) => (
+              <>
+                <Textarea
+                  {...field}
+                  value={field.value as string}
+                  placeholder="Content"
+                  rows={4}
+                />
+                {fieldState.error && (
+                  <span className="text-red-200 text-sm">
+                    Content is required
+                  </span>
+                )}
+              </>
+            )}
           />
-        </TabContent>
+        </EntryFormTabContent>
 
         {/* Image */}
-        <TabContent value="image">
-          <Dropzone
-            type="image"
-            accept={{ "image/*": [] }}
-            onDrop={(acceptedFiles) => {
-              if (acceptedFiles.length > 0) {
-                setValue("content", acceptedFiles[0]);
-              }
-            }}
-            maxFiles={1}
+        <EntryFormTabContent value="image">
+          <Controller
+            name="content"
+            control={control}
+            rules={{ required: true }}
+            render={({ field, fieldState }) => (
+              <>
+                <EntryFormDropzone
+                  type="image"
+                  accept={{ "image/*": [] }}
+                  maxFiles={1}
+                  onDrop={(acceptedFiles) => {
+                    if (acceptedFiles.length > 0) {
+                      field.onChange(acceptedFiles[0]);
+                    }
+                  }}
+                />
+                {field.value && (
+                  <EntryFormImageContent content={field.value as File} />
+                )}
+                {fieldState.error && (
+                  <span className="text-red-200 text-sm">
+                    Image is required
+                  </span>
+                )}
+              </>
+            )}
           />
-          {content && <ImageContent content={content as File} />}
-          {errors.content && (
-            <span className="text-red-200 text-sm">Image is required</span>
-          )}
-        </TabContent>
+        </EntryFormTabContent>
 
         {/* File */}
-        <TabContent value="file">
-          {content && <FileContent content={content as File} />}
-          <Dropzone
-            type="file"
-            onDrop={(acceptedFiles) => {
-              if (acceptedFiles.length > 0) {
-                if (acceptedFiles[0].type.startsWith("image/")) {
-                  setValue("type", "image");
-                }
-                setValue("content", acceptedFiles[0]);
-              }
-            }}
-            maxFiles={1}
+        <EntryFormTabContent value="file">
+          <Controller
+            control={control}
+            name="content"
+            rules={{ required: true }}
+            render={({ field, fieldState }) => (
+              <>
+                <EntryFormDropzone
+                  type="file"
+                  maxFiles={1}
+                  onDrop={(acceptedFiles) => {
+                    if (acceptedFiles.length > 0) {
+                      if (acceptedFiles[0].type.startsWith("image/")) {
+                        setValue("type", "image");
+                      }
+
+                      field.onChange(acceptedFiles[0]);
+                    }
+                  }}
+                />
+                {field.value && (
+                  <EntryFormFileContent content={field.value as File} />
+                )}
+                {fieldState.error && (
+                  <span className="text-red-200 text-sm">File is required</span>
+                )}
+              </>
+            )}
           />
-          {errors.content && (
-            <span className="text-red-200 text-sm">File is required</span>
-          )}
-        </TabContent>
+        </EntryFormTabContent>
       </Tabs.Root>
 
       <Button type="submit">Encrypt</Button>
