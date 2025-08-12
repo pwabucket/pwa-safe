@@ -130,7 +130,7 @@ function Welcome() {
         "min-h-dvh p-4 w-full max-w-sm mx-auto"
       )}
     >
-      <h1 className="text-6xl text-center text-green-500 font-audiowide">
+      <h1 className="text-6xl text-center text-green-500 font-audiowide leading-none">
         safe
       </h1>
       <p className="text-center text-green-500 px-4">
