@@ -1,12 +1,14 @@
 import { HiOutlineBars3, HiOutlinePlus } from "react-icons/hi2";
 import { Link } from "react-router";
 import { ReactTyped } from "react-typed";
+import { Reorder } from "motion/react";
 import { useMemo, useState } from "react";
 
 import AppLayout from "../layouts/AppLayout";
 import Card from "../components/Card";
 import EntryItem from "../components/EntryItem";
 import Input from "../components/Input";
+import ReorderItem from "../components/ReorderItem";
 import WindowOpenerHandler from "../components/WindowOpenerHandler";
 import useAppStore from "../store/useAppStore";
 import { HeaderButton } from "../layouts/HeaderButton";
@@ -15,6 +17,7 @@ import { searchProperties } from "../lib/utils";
 export default function Dashboard() {
   const [search, setSearch] = useState("");
   const entries = useAppStore((state) => state.entries);
+  const setEntries = useAppStore((state) => state.setEntries);
   const filteredEntries = useMemo(
     () => (search ? searchProperties(entries, search, ["title"]) : entries),
     [entries, search]
@@ -56,11 +59,21 @@ export default function Dashboard() {
               onChange={(e) => setSearch(e.target.value)}
             />
 
-            <div className="flex flex-col gap-4">
+            <Reorder.Group
+              values={entries}
+              onReorder={(newOrder) => setEntries(newOrder)}
+              className="flex flex-col gap-4"
+            >
               {filteredEntries.map((entry) => (
-                <EntryItem key={entry.id} entry={entry} />
+                <ReorderItem
+                  key={entry.id}
+                  value={entry}
+                  hideHandle={Boolean(search)}
+                >
+                  <EntryItem entry={entry} />
+                </ReorderItem>
               ))}
-            </div>
+            </Reorder.Group>
           </>
         )}
       </AppLayout>
