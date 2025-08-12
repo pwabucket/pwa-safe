@@ -55,7 +55,8 @@ export default function DecryptContent() {
         setFormData(null);
 
         dialogManager.markAsSuccess();
-      } catch {
+      } catch (error) {
+        console.error("Decryption failed:", error);
         dialogManager.markAsFailed();
       }
     },
