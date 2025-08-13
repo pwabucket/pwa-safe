@@ -25,7 +25,10 @@ export default function FileDropzone({
   });
 
   return (
-    <Card {...getRootProps()} className="text-sm text-center">
+    <Card
+      {...getRootProps()}
+      className="text-sm text-center min-h-24 flex flex-col justify-center gap-2"
+    >
       <input {...getInputProps()} />
       {isDragActive ? (
         <p>Drop the {title} here ...</p>

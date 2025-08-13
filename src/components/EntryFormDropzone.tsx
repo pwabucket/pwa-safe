@@ -9,7 +9,10 @@ export const EntryFormDropzone = ({
   const { getRootProps, getInputProps, isDragActive } = useDropzone(props);
 
   return (
-    <Card {...getRootProps()} className="text-sm text-center py-6">
+    <Card
+      {...getRootProps()}
+      className="text-sm text-center min-h-24 flex flex-col justify-center gap-2"
+    >
       <input {...getInputProps()} />
       {isDragActive ? (
         <p>Drop the {type} here ...</p>
