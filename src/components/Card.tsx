@@ -1,18 +1,24 @@
+import Borders from "./Borders";
 import { cn } from "../lib/utils";
 
-export default function Card(props: React.ComponentProps<"div">) {
+type CardProps = React.ComponentProps<"div"> & {
+  variant?: "default" | "subtle";
+};
+
+export default function Card({ variant = "default", ...props }: CardProps) {
   return (
     <div
       {...props}
       className={cn(
-        "relative border border-green-500 px-6 py-4 text-green-300",
+        "relative",
+        {
+          default: "border border-green-500 px-6 py-4 text-green-300",
+          subtle: "bg-green-500/5 text-green-500 p-4",
+        }[variant],
         props.className
       )}
     >
-      <span className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-green-500" />
-      <span className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-green-500" />
-      <span className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-green-500" />
-      <span className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-green-500" />
+      {variant === "default" && <Borders />}
       {props.children}
     </div>
   );
