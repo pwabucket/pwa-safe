@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router";
 import { useState } from "react";
+
 import Button from "../components/Button";
+import Card from "../components/Card";
 import FileDropzone from "../components/FileDropzone";
 import InnerAppLayout from "../layouts/InnerAppLayout";
 import ProcessDialog from "../components/ProcessDialog";
@@ -34,13 +36,13 @@ export default function Import() {
 
   return (
     <InnerAppLayout headerTitle={"Import"} className="flex flex-col gap-4">
-      <p className="flex flex-col gap-2 bg-green-500/5 text-green-500 p-4">
+      <Card variant="subtle" className="flex flex-col gap-2">
         <h2>Import Your Entries</h2>
         <p className="text-sm text-green-100">
           Choose a file to import your entries. The data will be processed and
           saved securely.
         </p>
-      </p>
+      </Card>
 
       <FileDropzone
         title="Backup File"

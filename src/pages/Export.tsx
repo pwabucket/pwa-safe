@@ -3,6 +3,7 @@ import { ReactTyped } from "react-typed";
 import { useState } from "react";
 
 import Button from "../components/Button";
+import Card from "../components/Card";
 import InnerAppLayout from "../layouts/InnerAppLayout";
 import ProcessDialog from "../components/ProcessDialog";
 import safe from "../services/safe";
@@ -54,7 +55,7 @@ export default function Export() {
     <InnerAppLayout headerTitle={"Export"} className="flex flex-col gap-4">
       {result ? (
         <>
-          <p className="flex flex-col gap-2 bg-green-500/5 text-green-500 p-4">
+          <Card variant="subtle" className="flex flex-col gap-2">
             <h2>Export Successful</h2>
             <p className="text-sm text-green-100">
               <ReactTyped
@@ -63,7 +64,7 @@ export default function Export() {
                 showCursor={false}
               />
             </p>
-          </p>
+          </Card>
           <Button
             onClick={() => {
               downloadFile(result, "exported_entries.zip");
@@ -74,7 +75,7 @@ export default function Export() {
         </>
       ) : (
         <>
-          <p className="flex flex-col gap-2 bg-green-500/5 text-green-500 p-4">
+          <Card variant="subtle" className="flex flex-col gap-2">
             <h2>Export Your Entries</h2>
             <p className="text-sm text-green-100">
               Click the button below to export your entries. The data will be
@@ -84,7 +85,7 @@ export default function Export() {
               Total Entries:{" "}
               <span className="text-green-500">{entries.length}</span>
             </p>
-          </p>
+          </Card>
 
           <Button type="submit" onClick={handleExport}>
             Export
