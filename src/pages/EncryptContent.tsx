@@ -11,6 +11,7 @@ import { ReactTyped } from "react-typed";
 import AccessCodePrompt from "../components/AccessCodePrompt";
 import useDialogManager from "../hooks/useDialogManager";
 import safe from "../services/safe";
+import Card from "../components/Card";
 
 export default function EncryptContent() {
   const dialogManager = useDialogManager();
@@ -81,9 +82,12 @@ export default function EncryptContent() {
         </>
       ) : (
         <>
-          <p className="bg-green-500/5 text-green-100 p-4">
-            Encrypt your content manually and securely.
-          </p>
+          <Card variant="subtle" className="flex flex-col gap-2">
+            <h2>Custom Encryption</h2>
+            <p className="text-sm text-green-100">
+              Encrypt your content securely with a custom access code.
+            </p>
+          </Card>
           <EntryForm disableTitle onSubmit={handleEncrypt} />
         </>
       )}

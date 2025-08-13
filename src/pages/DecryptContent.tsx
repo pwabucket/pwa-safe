@@ -10,6 +10,7 @@ import useDialogManager from "../hooks/useDialogManager";
 import type { EncryptedMetadata } from "../types/entry";
 import DecryptedContent from "../components/DecryptedContent";
 import safe from "../services/safe";
+import Card from "../components/Card";
 
 export default function DecryptContent() {
   const dialogManager = useDialogManager();
@@ -71,9 +72,12 @@ export default function DecryptContent() {
         </>
       ) : (
         <>
-          <p className="bg-green-500/5 text-green-100 p-4">
-            Decrypt your content manually and securely.
-          </p>
+          <Card variant="subtle" className="flex flex-col gap-2">
+            <h2>Custom Decryption</h2>
+            <p className="text-sm text-green-100">
+              Decrypt your content securely with a custom access code.
+            </p>
+          </Card>
           <DecryptionForm onSubmit={handleDecrypt} />
         </>
       )}
