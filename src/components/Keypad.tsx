@@ -13,6 +13,7 @@ export const KeyPadButton = (
   return (
     <button
       {...props}
+      type="button"
       ref={ref}
       className={cn(
         "p-4 bg-neutral-700 cursor-pointer font-bold",
