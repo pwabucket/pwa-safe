@@ -1,9 +1,14 @@
 import bcrypt from "bcryptjs";
 import type { StateCreator } from "zustand";
 
+type AccessCodeInputType = "pin" | "password";
+
 export type AppSlice = {
+  accessCodeInputType: AccessCodeInputType;
   accessCodeHash: string | null; // persisted
   decryptedAccessCode: string | null; // in-memory only
+  setAccessCodeInputType: (type: AccessCodeInputType) => void;
+  toggleAccessCodeInputType: () => void;
   setAccessCode: (plain: string) => Promise<void>;
   verifyAccessCode: (input: string) => Promise<boolean>;
   clearAccessCode: () => void;
@@ -13,8 +18,18 @@ export type AppSlice = {
 export const createAppSlice: StateCreator<AppSlice> & {
   excludes: (keyof AppSlice)[];
 } = (set, get) => ({
+  accessCodeInputType: "pin",
   accessCodeHash: null,
   decryptedAccessCode: null,
+
+  setAccessCodeInputType: (type: AccessCodeInputType) =>
+    set({ accessCodeInputType: type }),
+
+  toggleAccessCodeInputType: () =>
+    set((state) => ({
+      accessCodeInputType:
+        state.accessCodeInputType === "pin" ? "password" : "pin",
+    })),
 
   setAccessCode: async (plain) => {
     const hash = await bcrypt.hash(plain, 10);
