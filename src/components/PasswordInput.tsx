@@ -18,12 +18,15 @@ const PasswordInput = (props: React.ComponentProps<"input">) => {
       <button
         type="button"
         onClick={() => setShow((prev) => !prev)}
-        className="border border-l-0 border-green-500 px-2 cursor-pointer hover:bg-neutral-600"
+        className={cn(
+          "px-2 cursor-pointer bg-neutral-700 hover:bg-neutral-600",
+          "text-neutral-500 hover:text-green-400"
+        )}
       >
         {show ? (
-          <HiOutlineEye className="text-green-500 size-5" />
+          <HiOutlineEye className="size-5 stroke-3 text-green-400" />
         ) : (
-          <HiOutlineEyeSlash className="text-green-500 size-5" />
+          <HiOutlineEyeSlash className="size-5 stroke-3" />
         )}
       </button>
     </div>

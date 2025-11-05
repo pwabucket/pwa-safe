@@ -11,6 +11,9 @@ importers:
       '@fontsource/audiowide':
         specifier: ^5.2.6
         version: 5.2.6
+      '@fontsource/inter':
+        specifier: ^5.2.8
+        version: 5.2.8
       '@fontsource/orbitron':
         specifier: ^5.2.6
         version: 5.2.6
@@ -897,6 +900,9 @@ packages:
   '@fontsource/audiowide@5.2.6':
     resolution: {integrity: sha512-z1NGDnFksXilO5DRuM8apZN5J87MORy0aiM2qWwOOPXCwyMLMI4YCI+yp3reMjXmayF4ii/bjkTUiKJOw3xkWg==}
 
+  '@fontsource/inter@5.2.8':
+    resolution: {integrity: sha512-P6r5WnJoKiNVV+zvW2xM13gNdFhAEpQ9dQJHt3naLvfg+LkF2ldgSLiF4T41lf1SQCM9QmkqPTn4TH568IRagg==}
+
   '@fontsource/orbitron@5.2.6':
     resolution: {integrity: sha512-m6lI9jsts7Wk1gyMysEJSexkrZAqxDZ3DjTKMo4PJPKrYA3i//9iUp1Zy5NggPL6zyfQNbfpZwjtX9lrA3Zd3Q==}
 
@@ -1048,11 +1054,11 @@ packages:
   '@jridgewell/trace-mapping@0.3.29':
     resolution: {integrity: sha512-uw6guiW/gcAGPDhLmd77/6lW8QLeiV5RUTsAX46Db6oLhGaVj4lhnPwb184s1bkc8kdVg/+h988dro8GRDpmYQ==}
 
-  '@maxim_mazurok/gapi.client.discovery-v1@0.1.20200806':
-    resolution: {integrity: sha512-Wl6UfmZVDdWbY3PUu8E2ULk9RPLjnMqp/iOA4tcK8Ne+U/GmlnWP/e34IaZNGArfl7iXJNOG+/3Rj9L9jQyF9Q==}
+  '@maxim_mazurok/gapi.client.discovery-v1@0.4.20200806':
+    resolution: {integrity: sha512-Jeo/KZqK39DI6ExXHcJ4lqnn1O/wEqboQ6eQ8WnNpu5eJ7wUnX/C5KazOgs1aRhnIB/dVzDe8wm62nmtkMIoaw==}
 
-  '@maxim_mazurok/gapi.client.drive-v3@0.0.20250805':
-    resolution: {integrity: sha512-sT3NhREbpcCPfcaN6ZmRUj188gZD9jt50GwPx3k7YTVoSD41uXtqW/4h9qh5akChDTAnD+uNmIEoy7GdxbjBsg==}
+  '@maxim_mazurok/gapi.client.drive-v3@0.1.20251029':
+    resolution: {integrity: sha512-M0l06hg5ClhFMDAv7RybaRzYcaIzHkkLbIXqcxJy7tPnKfTv+qwk/KkLH0oznthP6h/Y5uFbJvx+rOG+leHu1g==}
 
   '@noble/ciphers@1.3.0':
     resolution: {integrity: sha512-2I0gnIVPtfnMw9ee9h1dJG7tp81+8Ob3OJb3Mv37rx5L40/b0i7djjCVvGOVqc9AEIQyvyu1i6ypKdFw8R8gQw==}
@@ -5013,6 +5019,8 @@ snapshots:
 
   '@fontsource/audiowide@5.2.6': {}
 
+  '@fontsource/inter@5.2.8': {}
+
   '@fontsource/orbitron@5.2.6': {}
 
   '@fontsource/share-tech-mono@5.2.6': {}
@@ -5128,12 +5136,12 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.4
 
-  '@maxim_mazurok/gapi.client.discovery-v1@0.1.20200806':
+  '@maxim_mazurok/gapi.client.discovery-v1@0.4.20200806':
     dependencies:
       '@types/gapi.client': 1.0.8
       '@types/gapi.client.discovery-v1': 0.0.4
 
-  '@maxim_mazurok/gapi.client.drive-v3@0.0.20250805':
+  '@maxim_mazurok/gapi.client.drive-v3@0.1.20251029':
     dependencies:
       '@types/gapi.client': 1.0.8
       '@types/gapi.client.discovery-v1': 0.0.4
@@ -6173,11 +6181,11 @@ snapshots:
 
   '@types/gapi.client.discovery-v1@0.0.4':
     dependencies:
-      '@maxim_mazurok/gapi.client.discovery-v1': 0.1.20200806
+      '@maxim_mazurok/gapi.client.discovery-v1': 0.4.20200806
 
   '@types/gapi.client.drive-v3@0.0.5':
     dependencies:
-      '@maxim_mazurok/gapi.client.drive-v3': 0.0.20250805
+      '@maxim_mazurok/gapi.client.drive-v3': 0.1.20251029
 
   '@types/gapi.client@1.0.8': {}
 

@@ -20,17 +20,11 @@ const Button: DynamicComponent<
       ref={ref}
       className={cn(
         "cursor-pointer outline-none",
-        "relative border px-4 py-2",
+        "relative px-4 py-2",
         "disabled:opacity-50",
         {
-          primary: [
-            "text-green-500 border-green-500",
-            "bg-green-500/5 hover:bg-green-500/10 focus:bg-green-500/10",
-          ],
-          danger: [
-            "text-red-500 border-red-500",
-            "bg-red-500/10 hover:bg-red-500/20 focus:bg-red-500/10",
-          ],
+          primary: ["bg-green-500 text-black"],
+          danger: ["bg-red-400 text-black"],
         }[variant],
         props.className
       )}

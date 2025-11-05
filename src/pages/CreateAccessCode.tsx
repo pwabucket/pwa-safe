@@ -42,12 +42,15 @@ export default function CreateAccessCode() {
         "min-h-dvh p-4 w-full max-w-sm mx-auto"
       )}
     >
-      <h1 className="text-2xl text-center text-green-500">Access Code</h1>
+      <h1 className="text-3xl text-center text-green-500 font-audiowide">
+        Access Code
+      </h1>
 
       <p className="text-center bg-green-500/5 text-green-500 p-4">
         <ReactTyped
           typeSpeed={20}
           strings={["Let's setup your account by creating an access code."]}
+          showCursor={false}
         />
       </p>
       <AccessCodeInput onFilled={handleAccessCodeCreated} />

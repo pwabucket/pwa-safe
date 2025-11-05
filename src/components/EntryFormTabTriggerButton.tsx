@@ -8,8 +8,8 @@ export const EntryFormTabTriggerButton = (
   <Tabs.Trigger
     {...props}
     className={cn(
-      "cursor-pointer text-sm p-2",
-      "border border-transparent",
+      "cursor-pointer text-sm p-2 font-bold",
+      "border-b-2 border-transparent",
       "data-[state=active]:border-green-500",
       "data-[state=active]:text-green-500"
     )}

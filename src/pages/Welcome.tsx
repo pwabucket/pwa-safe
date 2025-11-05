@@ -12,6 +12,7 @@ import useAccessCodeDialogManager from "../hooks/useAccessCodeDialogManager";
 import useAppStore from "../store/useAppStore";
 import useDialogManager from "../hooks/useDialogManager";
 import { cn } from "../lib/utils";
+import { SiGithub } from "react-icons/si";
 
 const ResetSafe = ({
   dialogManager,
@@ -133,20 +134,8 @@ function Welcome() {
       <h1 className="text-6xl text-center text-green-500 font-audiowide leading-none">
         safe
       </h1>
-      <p className="text-center text-green-500 px-4">
-        <ReactTyped
-          backDelay={2500}
-          strings={[
-            "Welcome, Agent",
-            "Mission Briefing: Confidential",
-            "Secure Channel Established",
-            "Decrypting Payload...",
-            "SAFE Online — No Backdoors Detected",
-          ]}
-        />
-      </p>
 
-      <p className="bg-green-500/5 text-green-500 p-4">
+      <p className="bg-green-500/5 text-green-500 text-sm p-4">
         <span className="font-bold">SAFE</span> is a secure vault for your
         secrets, passwords, and sensitive information.
       </p>
@@ -180,9 +169,19 @@ function Welcome() {
         </>
       )}
 
-      <p className="text-center text-green-300 text-xs">
-        v{import.meta.env.PACKAGE_VERSION}
-      </p>
+      <div className="flex flex-col gap-1">
+        <Link
+          target="_blank"
+          to={import.meta.env.VITE_APP_REPOSITORY}
+          className="flex justify-center items-center gap-2 text-neutral-400 hover:text-green-400 font-bold"
+        >
+          <SiGithub className="size-5" />
+          GitHub
+        </Link>
+        <p className="text-center text-green-300 text-xs">
+          v{import.meta.env.PACKAGE_VERSION}
+        </p>
+      </div>
 
       <ResetSafe dialogManager={resetDialog} />
     </div>
