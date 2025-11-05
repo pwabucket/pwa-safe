@@ -6,6 +6,8 @@ import {
   MdTextFields,
   MdImage,
   MdAttachFile,
+  MdDelete,
+  MdEdit,
 } from "react-icons/md";
 
 import Button from "./Button";
@@ -34,6 +36,28 @@ export default function EntryForm({
   const handleTypeChange = (formEntryType: Entry["type"]) => {
     setValue("content", formEntryType === "text" ? "" : null);
     setValue("type", formEntryType);
+  };
+
+  const handleFileChange = (
+    onChange: (file: File) => void,
+    accept?: string
+  ) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    if (accept) {
+      input.accept = accept;
+    }
+    input.onchange = (e) => {
+      const files = (e.target as HTMLInputElement).files;
+      if (files && files.length > 0) {
+        const selectedFile = files[0];
+        if (selectedFile.type.startsWith("image/")) {
+          setValue("type", "image");
+        }
+        onChange(selectedFile);
+      }
+    };
+    input.click();
   };
 
   return (
@@ -106,18 +130,43 @@ export default function EntryForm({
             rules={{ required: true }}
             render={({ field, fieldState }) => (
               <>
-                <EntryFormDropzone
-                  type="image"
-                  accept={{ "image/*": [] }}
-                  maxFiles={1}
-                  onDrop={(acceptedFiles) => {
-                    if (acceptedFiles.length > 0) {
-                      field.onChange(acceptedFiles[0]);
-                    }
-                  }}
-                />
-                {field.value && (
-                  <EntryFormImageContent content={field.value as File} />
+                {!field.value ? (
+                  <EntryFormDropzone
+                    type="image"
+                    accept={{ "image/*": [] }}
+                    maxFiles={1}
+                    onDrop={(acceptedFiles) => {
+                      if (acceptedFiles.length > 0) {
+                        field.onChange(acceptedFiles[0]);
+                      }
+                    }}
+                  />
+                ) : (
+                  <div className="space-y-3">
+                    <EntryFormImageContent content={field.value as File} />
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => field.onChange(null)}
+                        className="flex-1"
+                      >
+                        <MdDelete className="size-4" />
+                        Remove
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() =>
+                          handleFileChange(field.onChange, "image/*")
+                        }
+                        className="flex-1"
+                      >
+                        <MdEdit className="size-4" />
+                        Change
+                      </Button>
+                    </div>
+                  </div>
                 )}
                 {fieldState.error && (
                   <span className="text-red-200 text-sm">
@@ -137,21 +186,44 @@ export default function EntryForm({
             rules={{ required: true }}
             render={({ field, fieldState }) => (
               <>
-                <EntryFormDropzone
-                  type="file"
-                  maxFiles={1}
-                  onDrop={(acceptedFiles) => {
-                    if (acceptedFiles.length > 0) {
-                      if (acceptedFiles[0].type.startsWith("image/")) {
-                        setValue("type", "image");
-                      }
+                {!field.value ? (
+                  <EntryFormDropzone
+                    type="file"
+                    maxFiles={1}
+                    onDrop={(acceptedFiles) => {
+                      if (acceptedFiles.length > 0) {
+                        if (acceptedFiles[0].type.startsWith("image/")) {
+                          setValue("type", "image");
+                        }
 
-                      field.onChange(acceptedFiles[0]);
-                    }
-                  }}
-                />
-                {field.value && (
-                  <EntryFormFileContent content={field.value as File} />
+                        field.onChange(acceptedFiles[0]);
+                      }
+                    }}
+                  />
+                ) : (
+                  <div className="space-y-3">
+                    <EntryFormFileContent content={field.value as File} />
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => field.onChange(null)}
+                        className="flex-1"
+                      >
+                        <MdDelete className="size-4" />
+                        Remove
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => handleFileChange(field.onChange)}
+                        className="flex-1"
+                      >
+                        <MdEdit className="size-4" />
+                        Change
+                      </Button>
+                    </div>
+                  </div>
                 )}
                 {fieldState.error && (
                   <span className="text-red-200 text-sm">File is required</span>
