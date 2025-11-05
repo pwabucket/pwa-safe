@@ -40,7 +40,9 @@ export default function Dashboard() {
       >
         <div className="grid grid-cols-3">
           <Card className="flex flex-col gap-2">
-            <span className="text-green-300 text-2xl">{entries.length}</span>
+            <span className="text-green-300 text-4xl font-audiowide">
+              {entries.length}
+            </span>
             <p className="text-green-100 text-xs">
               <ReactTyped
                 strings={["Entries"]}
@@ -52,12 +54,12 @@ export default function Dashboard() {
         </div>
 
         {entries.length === 0 ? (
-          <p className="bg-green-500/5 text-green-500 p-4 text-center">
+          <p className="bg-green-500/5 text-green-500 p-4 text-center text-sm">
             No entries found. Click the button above to create your first entry.
           </p>
         ) : (
           <>
-            <div className="bg-green-500/5 text-green-500 p-4 flex gap-2">
+            <div className="bg-green-500/5 text-green-500 p-4 flex gap-2 text-sm">
               <HiOutlineExclamationTriangle className="size-8 shrink-0" />
               <p className="text-sm">
                 All entries are stored within your browser. Ensure to back them

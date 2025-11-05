@@ -14,8 +14,9 @@ export default function EntryItem({ entry }: { entry: Entry }) {
       to={`/entries/${entry.id}`}
       className={cn(
         "bg-neutral-700 hover:bg-neutral-600",
-        "px-4 py-2",
-        "flex gap-2 items-center"
+        "hover:text-green-100",
+        "flex gap-2 items-center",
+        "px-4 py-2"
       )}
     >
       <h2 className="grow min-w-0 truncate font-bold">{entry.title}</h2>
