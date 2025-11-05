@@ -1,5 +1,6 @@
 import { Dialog } from "radix-ui";
 import { HiOutlineXMark } from "react-icons/hi2";
+import { MdOutlineKey } from "react-icons/md";
 import { ReactTyped } from "react-typed";
 
 import AccessCodeInput from "./AccessCodeInput";
@@ -44,8 +45,10 @@ export default function AccessCodePrompt({
       >
         <div className="flex gap-4 items-start">
           <div className="grow min-w-0">
-            <Dialog.Title>{dialogTitle}</Dialog.Title>
-            <Dialog.Description className="text-sm text-green-100">
+            <Dialog.Title className="font-audiowide">
+              {dialogTitle}
+            </Dialog.Title>
+            <Dialog.Description className="text-xs text-green-100">
               {dialogDescription}
             </Dialog.Description>
           </div>
@@ -79,7 +82,11 @@ export default function AccessCodePrompt({
           />
         ) : !dialogManager.isProcessing ? (
           <>
-            <Button onClick={() => onAccessCode(accessCode as string)}>
+            <Button
+              variant={"secondary"}
+              onClick={() => onAccessCode(accessCode as string)}
+            >
+              <MdOutlineKey className="size-4" />
               Use Current
             </Button>
             <AccessCodeInput onFilled={(code) => onAccessCode(code)} />

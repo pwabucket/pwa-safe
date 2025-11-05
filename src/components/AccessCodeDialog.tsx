@@ -21,7 +21,7 @@ export default function AccessCodeDialog({
       <DialogContainer onInteractOutside={(e) => e.preventDefault()}>
         <div className="flex gap-2">
           <div className="grow min-w-0">
-            <Dialog.Title className="text-xs uppercase text-green-300">
+            <Dialog.Title className="text-xs uppercase text-green-300 font-audiowide">
               Agent Log
             </Dialog.Title>
             <Dialog.Description className="sr-only">

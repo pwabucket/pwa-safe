@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { MdOutlineShield } from "react-icons/md";
 
 import AccessCodeInputTypeToggle from "./AccessCodeInputTypeToggle";
 import AccessCodeOTPInput from "./AccessCodeOTPInput";
@@ -69,7 +70,10 @@ export default function AccessCodeInput({
               placeholder="Access Code"
             />
           </div>
-          <Button type="submit">Submit</Button>
+          <Button type="submit">
+            <MdOutlineShield className="size-4" />
+            Submit
+          </Button>
         </>
       )}
     </form>

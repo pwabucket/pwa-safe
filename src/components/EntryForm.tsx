@@ -108,9 +108,10 @@ export default function EntryForm({
               <>
                 <Textarea
                   {...field}
-                  value={field.value as string}
+                  value={typeof field.value === "string" ? field.value : ""}
                   placeholder="Content"
                   minRows={4}
+                  maxRows={20}
                 />
 
                 {/* Character Count */}
