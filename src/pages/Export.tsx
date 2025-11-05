@@ -1,6 +1,7 @@
 import JSZip from "jszip";
 import { ReactTyped } from "react-typed";
 import { useState } from "react";
+import { MdDownload, MdFileUpload } from "react-icons/md";
 
 import Button from "../components/Button";
 import Card from "../components/Card";
@@ -70,6 +71,7 @@ export default function Export() {
               downloadFile(result, "exported_entries.zip");
             }}
           >
+            <MdDownload className="size-5" />
             Download Exported Entries
           </Button>
         </>
@@ -88,6 +90,7 @@ export default function Export() {
           </Card>
 
           <Button type="submit" onClick={handleExport}>
+            <MdFileUpload className="size-5" />
             Export
           </Button>
         </>

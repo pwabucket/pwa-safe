@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import { MdFileDownload } from "react-icons/md";
 
 import Button from "../components/Button";
 import Card from "../components/Card";
@@ -51,6 +52,7 @@ export default function Import() {
       />
 
       <Button type="submit" onClick={handleImport}>
+        <MdFileDownload className="size-5" />
         Import
       </Button>
 
