@@ -3,9 +3,10 @@ import { base64 } from "@scure/base";
 import { scryptAsync } from "@noble/hashes/scrypt";
 
 export type EncryptableData = string | Uint8Array | ArrayBuffer;
-export type EncryptionResult = Awaited<
-  ReturnType<typeof Encrypter.encryptData>
->;
+export type EncryptionResult = {
+  encrypted: string | Uint8Array;
+  salt: string;
+};
 
 export default class Encrypter {
   static VERSION = 1;

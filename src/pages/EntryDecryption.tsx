@@ -48,7 +48,7 @@ export default function EntryDecryption() {
       const result =
         entry.type === "text"
           ? new TextDecoder().decode(decrypted)
-          : new File([decrypted], entry.filename as string, {
+          : new File([decrypted.slice()], entry.filename as string, {
               type: entry.filetype as string,
               lastModified: entry.fileLastModified,
             });

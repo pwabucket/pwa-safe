@@ -158,7 +158,7 @@ export default class SafeManager {
       salt: encryptedData.salt,
     });
 
-    return decryptedContent as Uint8Array;
+    return new Uint8Array(decryptedContent as Uint8Array);
   }
 
   async getEntryContent({
