@@ -1,5 +1,4 @@
-import { HiOutlineTrash } from "react-icons/hi2";
-import { MdEdit } from "react-icons/md";
+import { MdDeleteSweep, MdEdit } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import Button from "../components/Button";
@@ -53,7 +52,7 @@ export default function EntryUpdate() {
     <InnerAppLayout
       headerTitle={`Update: ${entry?.title || "Unknown"}`}
       headerRightContent={
-        <HeaderButton icon={HiOutlineTrash} onClick={onDelete} />
+        <HeaderButton icon={MdDeleteSweep} onClick={onDelete} />
       }
       className="flex flex-col gap-4"
     >

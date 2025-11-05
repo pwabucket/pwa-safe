@@ -1,4 +1,3 @@
-import { HiOutlinePencil } from "react-icons/hi2";
 import { Link, useParams } from "react-router";
 import { ReactTyped } from "react-typed";
 import { useState } from "react";
@@ -15,6 +14,7 @@ import type { Entry } from "../types/entry";
 import { HeaderButton } from "../layouts/HeaderButton";
 import { zipAndDownloadBundle } from "../lib/utils";
 import {
+  MdEditNote,
   MdOutlineAttachFile,
   MdOutlineFileDownload,
   MdOutlineImage,
@@ -79,7 +79,7 @@ export default function EntryDecryption() {
       headerRightContent={
         <HeaderButton
           as={Link}
-          icon={HiOutlinePencil}
+          icon={MdEditNote}
           to={`/entries/${entryId}/update`}
         />
       }
