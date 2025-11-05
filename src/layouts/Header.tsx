@@ -14,7 +14,7 @@ export default function Header({
   return (
     <div
       className={cn(
-        "bg-neutral-800",
+        "bg-neutral-900",
         "border-green-500",
         "shrink-0 sticky top-0 border-b",
         "h-12",

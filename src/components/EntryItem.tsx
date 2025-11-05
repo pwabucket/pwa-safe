@@ -1,17 +1,33 @@
 import { Link } from "react-router";
 
-import Button from "./Button";
 import type { Entry } from "../types/entry";
+import { cn } from "../lib/utils";
+import {
+  MdFilePresent,
+  MdOutlineImage,
+  MdOutlineTextFields,
+} from "react-icons/md";
 
 export default function EntryItem({ entry }: { entry: Entry }) {
   return (
-    <Button
-      as={Link}
+    <Link
       to={`/entries/${entry.id}`}
-      className="flex gap-2 items-center"
+      className={cn(
+        "bg-neutral-700 hover:bg-neutral-600",
+        "px-4 py-2",
+        "flex gap-2 items-center"
+      )}
     >
-      <h2 className="text-green-300 grow min-w-0 truncate">{entry.title}</h2>
-      <p className="text-xs text-green-100 uppercase">{entry.type}</p>
-    </Button>
+      <h2 className="grow min-w-0 truncate font-bold">{entry.title}</h2>
+      <span className="shrink-0 text-green-100">
+        {entry.type === "image" ? (
+          <MdOutlineImage className="size-5" />
+        ) : entry.type === "file" ? (
+          <MdFilePresent className="size-5" />
+        ) : (
+          <MdOutlineTextFields className="size-5" />
+        )}
+      </span>
+    </Link>
   );
 }
