@@ -1,6 +1,7 @@
 import copy from "copy-to-clipboard";
 import { ReactTyped } from "react-typed";
 import { useState } from "react";
+import { MdContentCopy, MdDownload, MdCheck } from "react-icons/md";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import type { EncryptedMetadata } from "../types/entry";
@@ -20,7 +21,17 @@ const TextEntryContent = ({ content }: { content: string }) => {
         }}
         className="mt-2"
       >
-        {copied ? "Copied!" : "Copy to Clipboard"}
+        {copied ? (
+          <>
+            <MdCheck className="size-5" />
+            Copied!
+          </>
+        ) : (
+          <>
+            <MdContentCopy className="size-5" />
+            Copy to Clipboard
+          </>
+        )}
       </Button>
     </Card>
   );
@@ -53,6 +64,7 @@ const ImageEntryContent = ({
       }}
       className="mt-2"
     >
+      <MdDownload className="size-5" />
       Download Image
     </Button>
   </Card>
@@ -79,6 +91,7 @@ const FileEntryContent = ({
       }}
       className="mt-2"
     >
+      <MdDownload className="size-5" />
       Download File
     </Button>
   </Card>
