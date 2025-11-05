@@ -112,6 +112,14 @@ export default function EntryForm({
                   placeholder="Content"
                   minRows={4}
                 />
+
+                {/* Character Count */}
+                <p className="text-xs text-green-400">
+                  {typeof field.value === "string" ? field.value.length : 0}{" "}
+                  characters
+                </p>
+
+                {/* Error Message */}
                 {fieldState.error && (
                   <span className="text-red-200 text-sm">
                     Content is required
