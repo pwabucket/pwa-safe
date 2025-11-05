@@ -3,17 +3,33 @@ import { Link, useNavigate, type LinkProps } from "react-router";
 import Button from "../components/Button";
 import InnerAppLayout from "../layouts/InnerAppLayout";
 import useAppStore from "../store/useAppStore";
-import { cn } from "../lib/utils";
+import {
+  MdOutlineKey,
+  MdLockOpen,
+  MdSecurity,
+  MdFileUpload,
+  MdFileDownload,
+  MdLogout,
+  MdPrivacyTip,
+  MdGavel,
+} from "react-icons/md";
+import AppVersion from "../components/AppVersion";
 
 const MenuButton = (props: LinkProps) => (
-  <Link
+  <Button
+    as={Link}
     {...props}
-    className={cn(
-      "block w-full text-center px-4 py-2",
-      "bg-neutral-700 hover:bg-neutral-600",
-      "text-neutral-400  hover:text-green-500"
-    )}
+    variant={"secondary"}
+    className="justify-start"
   />
+);
+
+const MenuHeader = ({ children }: { children: React.ReactNode }) => (
+  <h3 className="text-green-300 font-bold">{children}</h3>
+);
+
+const MenuSection = ({ children }: { children: React.ReactNode }) => (
+  <div className="grid gap-2">{children}</div>
 );
 
 export default function Menu() {
@@ -27,33 +43,61 @@ export default function Menu() {
 
   return (
     <InnerAppLayout headerTitle="Menu" className="gap-4">
-      <MenuButton to="/update-access-code">Update Access Code</MenuButton>
+      {/* Account */}
+      <MenuHeader>Account</MenuHeader>
+      <MenuButton to="/update-access-code">
+        <MdSecurity className="size-5" />
+        Update Access Code
+      </MenuButton>
 
-      <h3>Content</h3>
-      <div className="grid grid-cols-2 gap-2">
-        <MenuButton to="/encrypt">Encrypt Content</MenuButton>
+      {/* Content */}
+      <MenuHeader>Content</MenuHeader>
+      <MenuSection>
+        <MenuButton to="/encrypt">
+          <MdOutlineKey className="size-5" />
+          Encrypt Content
+        </MenuButton>
 
-        <MenuButton to="/decrypt">Decrypt Content</MenuButton>
-      </div>
+        <MenuButton to="/decrypt">
+          <MdLockOpen className="size-5" />
+          Decrypt Content
+        </MenuButton>
+      </MenuSection>
 
-      <h3>Backup / Restore</h3>
-      <div className="grid grid-cols-2 gap-2">
-        <MenuButton to="/export">Export Entries</MenuButton>
+      {/* Backup / Restore */}
+      <MenuHeader>Backup / Restore</MenuHeader>
+      <MenuSection>
+        <MenuButton to="/export">
+          <MdFileUpload className="size-5" />
+          Export Entries
+        </MenuButton>
 
-        <MenuButton to="/import">Import Entries</MenuButton>
-      </div>
+        <MenuButton to="/import">
+          <MdFileDownload className="size-5" />
+          Import Entries
+        </MenuButton>
+      </MenuSection>
 
-      <Button onClick={signOut}>Sign Out</Button>
+      {/* Legal */}
+      <MenuHeader>Legal</MenuHeader>
+      <MenuSection>
+        <MenuButton to="/privacy-policy">
+          <MdPrivacyTip className="size-5" />
+          Privacy Policy
+        </MenuButton>
 
-      <div className="grid grid-cols-2 gap-2 mt-4 text-center">
-        <MenuButton to="/privacy-policy">Privacy Policy</MenuButton>
+        <MenuButton to="/terms-of-use">
+          <MdGavel className="size-5" />
+          Terms of Use
+        </MenuButton>
+      </MenuSection>
 
-        <MenuButton to="/terms-of-use">Terms of Use</MenuButton>
-      </div>
+      <Button onClick={signOut}>
+        <MdLogout className="size-5" />
+        Sign Out
+      </Button>
 
-      <p className="text-center text-green-300">
-        v{import.meta.env.PACKAGE_VERSION}
-      </p>
+      <AppVersion />
     </InnerAppLayout>
   );
 }

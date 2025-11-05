@@ -1,14 +1,45 @@
 import { useRef } from "react";
 
-import Borders from "./Borders";
 import useButtonClick from "../hooks/useButtonClick";
 import type { DynamicComponent } from "../types/types";
 import { cn } from "../lib/utils";
+import { cva, type VariantProps } from "class-variance-authority";
 
-const Button: DynamicComponent<
-  "button",
-  { variant?: "primary" | "danger"; borders?: boolean }
-> = ({ as, variant = "primary", borders = true, ...props }) => {
+const buttonVariants = cva(
+  [
+    "cursor-pointer outline-none",
+    "relative px-4 py-2",
+    "flex justify-center items-center gap-2",
+    "disabled:opacity-50",
+  ],
+  {
+    variants: {
+      variant: {
+        primary: ["bg-green-500 text-black"],
+        secondary: [
+          "font-bold",
+          "bg-neutral-700 text-neutral-200",
+          "hover:text-green-100",
+        ],
+        danger: ["bg-red-400 text-black"],
+      },
+    },
+    defaultVariants: {
+      variant: "primary",
+    },
+  }
+);
+
+interface ButtonProps extends VariantProps<typeof buttonVariants> {
+  borders?: boolean;
+}
+
+const Button: DynamicComponent<"button", ButtonProps> = ({
+  as,
+  variant,
+  className,
+  ...props
+}) => {
   const Component = as || "button";
   const ref = useRef<HTMLElement | null>(null);
 
@@ -18,27 +49,8 @@ const Button: DynamicComponent<
     <Component
       {...props}
       ref={ref}
-      className={cn(
-        "cursor-pointer outline-none",
-        "relative px-4 py-2",
-        "disabled:opacity-50",
-        {
-          primary: ["bg-green-500 text-black"],
-          danger: ["bg-red-400 text-black"],
-        }[variant],
-        props.className
-      )}
+      className={cn(buttonVariants({ variant, className }))}
     >
-      {borders && (
-        <Borders
-          className={cn(
-            {
-              primary: "border-green-500",
-              danger: "border-red-500",
-            }[variant]
-          )}
-        />
-      )}
       {props.children}
     </Component>
   );

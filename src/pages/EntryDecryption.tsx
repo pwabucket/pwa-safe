@@ -4,7 +4,6 @@ import { ReactTyped } from "react-typed";
 import { useState } from "react";
 
 import Button from "../components/Button";
-import Card from "../components/Card";
 import DecryptedContent from "../components/DecryptedContent";
 import InnerAppLayout from "../layouts/InnerAppLayout";
 import ProcessDialog from "../components/ProcessDialog";
@@ -15,6 +14,13 @@ import useDialogManager from "../hooks/useDialogManager";
 import type { Entry } from "../types/entry";
 import { HeaderButton } from "../layouts/HeaderButton";
 import { zipAndDownloadBundle } from "../lib/utils";
+import {
+  MdFilePresent,
+  MdOutlineFileDownload,
+  MdOutlineImage,
+  MdOutlineSearch,
+  MdOutlineTextFields,
+} from "react-icons/md";
 
 export default function EntryDecryption() {
   const accessCode = useAccessCode();
@@ -79,24 +85,41 @@ export default function EntryDecryption() {
       }
       className="flex flex-col gap-4"
     >
-      <Card>
-        <span className="text-xs uppercase text-green-100">{entry.type}</span>
-        <h1>{entry.title}</h1>
-        <p className="text-xs text-green-100">
-          <ReactTyped
-            strings={[new Date(entry.createdAt).toString()]}
-            typeSpeed={5}
-            showCursor={false}
-          />
-        </p>
-      </Card>
+      <div className="bg-neutral-700 p-4 flex gap-4">
+        <span className="text-xs uppercase text-green-100 shrink-0">
+          {entry.type === "image" ? (
+            <MdOutlineImage className="size-7" />
+          ) : entry.type === "file" ? (
+            <MdFilePresent className="size-7" />
+          ) : (
+            <MdOutlineTextFields className="size-7" />
+          )}
+        </span>
 
-      <Button onClick={downloadBundle}>Download Encrypted Bundle</Button>
+        <div className="min-w-0">
+          <h1 className="font-bold">{entry.title}</h1>
+          <p className="text-xs text-green-100 font-audiowide">
+            <ReactTyped
+              strings={[new Date(entry.createdAt).toString()]}
+              typeSpeed={5}
+              showCursor={false}
+            />
+          </p>
+        </div>
+      </div>
+
+      <Button onClick={downloadBundle} variant={"secondary"}>
+        <MdOutlineFileDownload className="size-5" />
+        Download Encrypted Bundle
+      </Button>
 
       {content ? (
         <DecryptedContent metadata={entry} content={content} />
       ) : (
-        <Button onClick={handleDecrypt}>Decrypt Data</Button>
+        <Button onClick={handleDecrypt} className="font-bold">
+          <MdOutlineSearch className="size-5" />
+          Decrypt Data
+        </Button>
       )}
 
       <ProcessDialog
