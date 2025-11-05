@@ -1,5 +1,6 @@
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
+import { MdLockOpen } from "react-icons/md";
 
 import Button from "./Button";
 import FileDropzone from "./FileDropzone";
@@ -26,7 +27,10 @@ export default function DecryptionForm({
         onDrop={(file) => setValue("encryptedBundle", file)}
       />
 
-      <Button type="submit">Decrypt</Button>
+      <Button type="submit">
+        <MdLockOpen className="size-5" />
+        Decrypt
+      </Button>
     </form>
   );
 }
