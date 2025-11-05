@@ -17,6 +17,7 @@ import WindowOpenerHandler from "../components/WindowOpenerHandler";
 import useAppStore from "../store/useAppStore";
 import { HeaderButton } from "../layouts/HeaderButton";
 import { searchProperties } from "../lib/utils";
+import { MdOutlineSearch } from "react-icons/md";
 
 export default function Dashboard() {
   const [search, setSearch] = useState("");
@@ -59,19 +60,32 @@ export default function Dashboard() {
           </p>
         ) : (
           <>
+            {/* Warning Message */}
             <div className="bg-green-500/5 text-green-500 p-4 flex gap-2 text-sm">
               <HiOutlineExclamationTriangle className="size-8 shrink-0" />
               <p className="text-sm">
-                All entries are stored within your browser. Ensure to back them
-                up manually.
+                All entries are stored within your browser. Ensure to export
+                your entries regularly.
               </p>
             </div>
-            <Input
-              name="search-entry"
-              placeholder="Search entries..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+
+            {/* Search Input */}
+            <div className="relative w-full flex flex-col">
+              {/* Search Icon */}
+              <span className="absolute top-0 left-0 w-10 h-full flex items-center justify-center">
+                <MdOutlineSearch className="size-6 text-neutral-500" />
+              </span>
+
+              {/* Input */}
+              <Input
+                type="search"
+                name="search-entry"
+                placeholder="Search entries..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-10"
+              />
+            </div>
 
             <Reorder.Group
               values={entries}
