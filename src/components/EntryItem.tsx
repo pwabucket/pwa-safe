@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import type { Entry } from "../types/entry";
 import { cn } from "../lib/utils";
 import {
-  MdFilePresent,
+  MdOutlineAttachFile,
   MdOutlineImage,
   MdOutlineTextFields,
 } from "react-icons/md";
@@ -24,7 +24,7 @@ export default function EntryItem({ entry }: { entry: Entry }) {
         {entry.type === "image" ? (
           <MdOutlineImage className="size-5" />
         ) : entry.type === "file" ? (
-          <MdFilePresent className="size-5" />
+          <MdOutlineAttachFile className="size-5" />
         ) : (
           <MdOutlineTextFields className="size-5" />
         )}

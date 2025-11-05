@@ -1,4 +1,5 @@
 import { HiOutlineTrash } from "react-icons/hi2";
+import { MdEdit } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import Button from "../components/Button";
@@ -65,7 +66,10 @@ export default function EntryUpdate() {
           )}
         </div>
 
-        <Button type="submit">Update Entry</Button>
+        <Button type="submit">
+          <MdEdit className="size-5" />
+          Update Entry
+        </Button>
       </form>
 
       <ProcessDialog

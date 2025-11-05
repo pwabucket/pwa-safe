@@ -1,6 +1,12 @@
 import { Controller, useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import { Tabs } from "radix-ui";
+import {
+  MdOutlineKey,
+  MdTextFields,
+  MdImage,
+  MdAttachFile,
+} from "react-icons/md";
 
 import Button from "./Button";
 import Input from "./Input";
@@ -55,12 +61,15 @@ export default function EntryForm({
       >
         <Tabs.List className="grid grid-cols-3 gap-2">
           <EntryFormTabTriggerButton value="text">
+            <MdTextFields className="size-4" />
             Text
           </EntryFormTabTriggerButton>
           <EntryFormTabTriggerButton value="image">
+            <MdImage className="size-4" />
             Image
           </EntryFormTabTriggerButton>
           <EntryFormTabTriggerButton value="file">
+            <MdAttachFile className="size-4" />
             File
           </EntryFormTabTriggerButton>
         </Tabs.List>
@@ -153,7 +162,10 @@ export default function EntryForm({
         </EntryFormTabContent>
       </Tabs.Root>
 
-      <Button type="submit">Encrypt</Button>
+      <Button type="submit">
+        <MdOutlineKey className="size-5" />
+        Encrypt
+      </Button>
     </form>
   );
 }

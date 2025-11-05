@@ -15,7 +15,7 @@ import type { Entry } from "../types/entry";
 import { HeaderButton } from "../layouts/HeaderButton";
 import { zipAndDownloadBundle } from "../lib/utils";
 import {
-  MdFilePresent,
+  MdOutlineAttachFile,
   MdOutlineFileDownload,
   MdOutlineImage,
   MdOutlineSearch,
@@ -90,7 +90,7 @@ export default function EntryDecryption() {
           {entry.type === "image" ? (
             <MdOutlineImage className="size-7" />
           ) : entry.type === "file" ? (
-            <MdFilePresent className="size-7" />
+            <MdOutlineAttachFile className="size-7" />
           ) : (
             <MdOutlineTextFields className="size-7" />
           )}
