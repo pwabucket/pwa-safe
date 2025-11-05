@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import { MdSecurity } from "react-icons/md";
 
 import AccessCodeInputTypeToggle from "../components/AccessCodeInputTypeToggle";
 import AccessCodeOTPInput from "../components/AccessCodeOTPInput";
@@ -78,7 +79,10 @@ export default function UpdateAccessCode() {
         setValue={setNewAccessCode}
       />
 
-      <Button onClick={updateAccessCode}>Update Access Code</Button>
+      <Button onClick={updateAccessCode}>
+        <MdSecurity className="size-5" />
+        Update Access Code
+      </Button>
 
       <ProcessDialog
         isOpen={dialogManager.isDialogVisible}
