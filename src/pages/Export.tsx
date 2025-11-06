@@ -68,7 +68,10 @@ export default function Export() {
           </Card>
           <Button
             onClick={() => {
-              downloadFile(result, "exported_entries.zip");
+              downloadFile(
+                result,
+                `safe-entries-${new Date().toISOString()}.zip`
+              );
             }}
           >
             <MdDownload className="size-5" />
