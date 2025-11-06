@@ -21,7 +21,7 @@ export default function AccessCodeOTPInput({
         "basis-0 grow text-green-500  font-bold font-mono text-center",
         "border-transparent bg-neutral-700 focus:border-green-500"
       )}
-      renderInput={(props) => <Input {...props} />}
+      renderInput={(props) => <Input {...props} inputMode="numeric" />}
     />
   );
 }
