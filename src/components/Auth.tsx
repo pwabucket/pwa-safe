@@ -4,58 +4,55 @@ import { useCallback, useState } from "react";
 import AccessCodeDialog from "./AccessCodeDialog";
 import AccessCodeInput from "./AccessCodeInput";
 import Button from "./Button";
-import useAccessCodeDialogManager from "../hooks/useAccessCodeDialogManager";
 import useAppStore from "../store/useAppStore";
-import useDialogManager from "../hooks/useDialogManager";
 import { cn } from "../lib/utils";
 import AppVersion from "./AppVersion";
 import ResetSafe from "./ResetSafe";
+import { useMutation } from "@tanstack/react-query";
+import { useAccessCodeInput } from "../hooks/useAccessCodeInput";
 
-function Auth({
-  onSuccessfulLogin,
-}: {
-  onSuccessfulLogin?: (verifiedCode: string | null) => void;
-}) {
-  const [verifiedCode, setVerifiedCode] = useState<string | null>(null);
+function Auth({ onSuccessfulLogin }: { onSuccessfulLogin?: () => void }) {
   const accessCodeHash = useAppStore((state) => state.accessCodeHash);
+  const setDecryptedAccessCode = useAppStore(
+    (state) => state.setDecryptedAccessCode
+  );
   const verifyAccessCode = useAppStore((state) => state.verifyAccessCode);
+  const [showAccessCodeDialog, setShowAccessCodeDialog] = useState(false);
+  const [showResetDialog, setShowResetDialog] = useState(false);
 
-  const {
-    isDialogVisible,
-    isProcessing,
-    isInvalidAccessCode,
-    showDialog,
-    hideDialog,
-    startProcessing,
-    markValidAccessCode,
-    markInvalidAccessCode,
-  } = useAccessCodeDialogManager();
+  /* Mutation to verify access code */
+  const mutation = useMutation({
+    mutationKey: ["verify-access-code"],
+    mutationFn: async (code: string) => {
+      const passed = await verifyAccessCode(code);
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      if (!passed) {
+        throw new Error("Invalid access code");
+      }
 
-  const resetDialog = useDialogManager();
+      return { code };
+    },
+  });
 
+  /* Handle access code submission */
   const handleAccessCodeSubmit = useCallback(
     async (code: string) => {
-      showDialog();
-      startProcessing();
-
-      const passed = await verifyAccessCode(code);
-
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      if (passed) {
-        markValidAccessCode();
-        setVerifiedCode(code);
-      } else {
-        markInvalidAccessCode();
-      }
+      setShowAccessCodeDialog(true);
+      mutation.mutate(code);
     },
-    [
-      showDialog,
-      startProcessing,
-      markValidAccessCode,
-      markInvalidAccessCode,
-      verifyAccessCode,
-    ]
+    [mutation]
   );
+
+  /* Handle completion of access code verification */
+  const handleOnComplete = () => {
+    setShowAccessCodeDialog(false);
+    if (mutation.data) {
+      setDecryptedAccessCode(mutation.data.code);
+      onSuccessfulLogin?.();
+    }
+  };
+
+  const inputManager = useAccessCodeInput(handleAccessCodeSubmit);
 
   return (
     <div
@@ -75,20 +72,17 @@ function Auth({
 
       {accessCodeHash ? (
         <>
-          <AccessCodeInput onFilled={handleAccessCodeSubmit} />
+          <AccessCodeInput manager={inputManager} />
           <AccessCodeDialog
             mode="verify"
-            isDialogVisible={isDialogVisible}
-            isProcessing={isProcessing}
-            isInvalidAccessCode={isInvalidAccessCode}
-            onComplete={() => {
-              if (isInvalidAccessCode) hideDialog();
-              else onSuccessfulLogin?.(verifiedCode);
-            }}
+            isDialogVisible={showAccessCodeDialog}
+            isProcessing={mutation.isPending}
+            isInvalidAccessCode={mutation.isError}
+            onComplete={handleOnComplete}
           />
 
           <button
-            onClick={resetDialog.showDialog}
+            onClick={() => setShowResetDialog(true)}
             className="text-xs text-green-100 cursor-pointer p-1"
           >
             INITIATE VOID SEQUENCE
@@ -104,7 +98,7 @@ function Auth({
 
       <AppVersion />
 
-      <ResetSafe dialogManager={resetDialog} />
+      <ResetSafe open={showResetDialog} onOpenChange={setShowResetDialog} />
     </div>
   );
 }

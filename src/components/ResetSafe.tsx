@@ -5,31 +5,28 @@ import Button from "./Button";
 import DialogContainer from "./DialogContainer";
 import safe from "../services/safe";
 import useAppStore from "../store/useAppStore";
-import useDialogManager from "../hooks/useDialogManager";
 import { cn } from "../lib/utils";
+import { useMutation } from "@tanstack/react-query";
 
-const ResetSafe = ({
-  dialogManager,
-}: {
-  dialogManager: ReturnType<typeof useDialogManager>;
-}) => {
+const ResetSafe = ({ open, onOpenChange }: Dialog.DialogProps) => {
   const clearEntries = useAppStore((state) => state.clearEntries);
   const resetAccessCode = useAppStore((state) => state.resetAccessCode);
 
+  const mutation = useMutation({
+    mutationKey: ["reset-safe"],
+    mutationFn: async () => {
+      await safe.clearEntries();
+      clearEntries();
+      resetAccessCode();
+    },
+  });
+
   const handleReset = async () => {
-    dialogManager.startProcessing();
-    await safe.clearEntries();
-    clearEntries();
-    resetAccessCode();
-    dialogManager.stopProcessing();
-    dialogManager.markAsSuccess();
+    await mutation.mutateAsync();
   };
 
   return (
-    <Dialog.Root
-      open={dialogManager.isDialogVisible}
-      onOpenChange={dialogManager.hideDialog}
-    >
+    <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <DialogContainer onInteractOutside={(e) => e.preventDefault()}>
         <Dialog.Title className="text-xs uppercase text-green-300">
           Void Sequence
@@ -37,18 +34,16 @@ const ResetSafe = ({
         <Dialog.Description
           className={cn(
             "text-yellow-100",
-            dialogManager.isProcessing || dialogManager.isSuccess
-              ? "sr-only"
-              : ""
+            mutation.isPending || mutation.isSuccess ? "sr-only" : ""
           )}
         >
           Initiating Safe reset. All entries and access codes will be
           permanently erased.
         </Dialog.Description>
 
-        {dialogManager.isProcessing ? (
+        {mutation.isPending ? (
           <p className="text-green-100">Processing...</p>
-        ) : dialogManager.isSuccess ? (
+        ) : mutation.isSuccess ? (
           <p className="text-green-100">
             <ReactTyped
               typeSpeed={20}
@@ -58,7 +53,7 @@ const ResetSafe = ({
               ]}
               onComplete={() =>
                 new Promise((resolve) => setTimeout(resolve, 2000)).then(() => {
-                  dialogManager.resetDialogState();
+                  onOpenChange?.(false);
                 })
               }
             />

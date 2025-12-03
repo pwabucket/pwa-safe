@@ -1,16 +1,10 @@
 import { useNavigate } from "react-router";
 import Auth from "../components/Auth";
-import useAppStore from "../store/useAppStore";
 
 function Welcome() {
   const navigate = useNavigate();
-  const setDecryptedAccessCode = useAppStore(
-    (state) => state.setDecryptedAccessCode
-  );
-  const handleSuccessfulLogin = (verifiedCode: string | null) => {
-    if (verifiedCode !== null) {
-      setDecryptedAccessCode(verifiedCode);
-    }
+
+  const handleSuccessfulLogin = () => {
     navigate("/dashboard", { replace: true });
   };
 

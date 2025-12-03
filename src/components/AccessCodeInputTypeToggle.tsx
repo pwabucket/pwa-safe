@@ -1,19 +1,25 @@
-import useAppStore from "../store/useAppStore";
+import { cn } from "../lib/utils";
 
-const AccessCodeInputTypeToggle = () => {
-  const accessCodeInputType = useAppStore((state) => state.accessCodeInputType);
-  const toggleAccessCodeInputType = useAppStore(
-    (state) => state.toggleAccessCodeInputType
-  );
+interface AccessCodeInputTypeToggleProps
+  extends React.ComponentProps<"button"> {
+  inputType: "pin" | "password";
+}
 
+const AccessCodeInputTypeToggle = ({
+  inputType,
+  ...props
+}: AccessCodeInputTypeToggleProps) => {
   return (
     <div className="flex justify-end">
       <button
+        {...props}
         type="button"
-        onClick={toggleAccessCodeInputType}
-        className="border border-green-500 cursor-pointer text-xs p-1 text-green-500"
+        className={cn(
+          "border border-green-500 cursor-pointer text-xs p-1 text-green-500",
+          props.className
+        )}
       >
-        Use {accessCodeInputType === "pin" ? "Password" : "PIN"}
+        Use {inputType === "pin" ? "Password" : "PIN"}
       </button>
     </div>
   );

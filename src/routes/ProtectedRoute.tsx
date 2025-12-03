@@ -4,18 +4,9 @@ import useIsLoggedIn from "../hooks/useIsLoggedIn";
 import { Dialog } from "radix-ui";
 import { cn } from "../lib/utils";
 import Auth from "../components/Auth";
-import useAppStore from "../store/useAppStore";
 
 export default function ProtectedRoute() {
   const isLoggedIn = useIsLoggedIn();
-  const setDecryptedAccessCode = useAppStore(
-    (state) => state.setDecryptedAccessCode
-  );
-  const handleSuccessfulLogin = (verifiedCode: string | null) => {
-    if (verifiedCode !== null) {
-      setDecryptedAccessCode(verifiedCode);
-    }
-  };
 
   return (
     <>
@@ -38,7 +29,7 @@ export default function ProtectedRoute() {
               <Dialog.Description className="sr-only">
                 Please log in to access the application.
               </Dialog.Description>
-              <Auth onSuccessfulLogin={handleSuccessfulLogin} />
+              <Auth />
             </Dialog.Content>
           </Dialog.Overlay>
         </Dialog.Root>

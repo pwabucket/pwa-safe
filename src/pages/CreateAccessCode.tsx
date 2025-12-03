@@ -7,6 +7,7 @@ import AccessCodeInput from "../components/AccessCodeInput";
 import useAccessCodeDialogManager from "../hooks/useAccessCodeDialogManager";
 import useAppStore from "../store/useAppStore";
 import { cn } from "../lib/utils";
+import { useAccessCodeInput } from "../hooks/useAccessCodeInput";
 
 export default function CreateAccessCode() {
   const {
@@ -31,6 +32,8 @@ export default function CreateAccessCode() {
     [setAccessCode, showDialog, startProcessing, stopProcessing]
   );
 
+  const inputManager = useAccessCodeInput(handleAccessCodeCreated);
+
   if (accessCodeHash && isDialogVisible === false) {
     return <Navigate to="/" replace />;
   }
@@ -53,7 +56,7 @@ export default function CreateAccessCode() {
           showCursor={false}
         />
       </p>
-      <AccessCodeInput onFilled={handleAccessCodeCreated} />
+      <AccessCodeInput manager={inputManager} />
 
       <AccessCodeDialog
         mode="create"

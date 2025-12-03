@@ -8,6 +8,7 @@ import Button from "./Button";
 import DialogContainer from "./DialogContainer";
 import useAccessCode from "../hooks/useAccessCode";
 import type useDialogManager from "../hooks/useDialogManager";
+import { useAccessCodeInput } from "../hooks/useAccessCodeInput";
 
 export default function AccessCodePrompt({
   dialogManager,
@@ -33,6 +34,8 @@ export default function AccessCodePrompt({
     : dialogManager.isProcessing
     ? processingDescription
     : `Enter an access code to ${mode} your content.`;
+
+  const inputManager = useAccessCodeInput(onAccessCode);
 
   return (
     <Dialog.Root
@@ -89,7 +92,7 @@ export default function AccessCodePrompt({
               <MdOutlineKey className="size-4" />
               Use Current
             </Button>
-            <AccessCodeInput onFilled={(code) => onAccessCode(code)} />
+            <AccessCodeInput manager={inputManager} />
           </>
         ) : null}
       </DialogContainer>
