@@ -45,7 +45,7 @@ export const zipAndDownloadBundle = ({
   zip.file("data.enc", encryptedData.encrypted as Uint8Array);
 
   zip.generateAsync({ type: "blob" }).then((content) => {
-    downloadFile(content, `bundle-${filename}.zip`);
+    downloadFile(content, `safe-bundle-${filename}.zip`);
   });
 };
 
