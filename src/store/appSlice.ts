@@ -10,6 +10,7 @@ export type AppSlice = {
   setAccessCodeInputType: (type: AccessCodeInputType) => void;
   toggleAccessCodeInputType: () => void;
   setAccessCode: (plain: string) => Promise<void>;
+  setDecryptedAccessCode: (plain: string) => void;
   verifyAccessCode: (input: string) => Promise<boolean>;
   clearAccessCode: () => void;
   resetAccessCode: () => void;
@@ -39,14 +40,14 @@ export const createAppSlice: StateCreator<AppSlice> & {
     });
   },
 
+  setDecryptedAccessCode: (plain) => {
+    set({ decryptedAccessCode: plain });
+  },
+
   verifyAccessCode: async (input) => {
     const hash = get().accessCodeHash;
     if (!hash) return false;
-    const match = await bcrypt.compare(input, hash);
-    if (match) {
-      set({ decryptedAccessCode: input });
-    }
-    return match;
+    return await bcrypt.compare(input, hash);
   },
 
   clearAccessCode: () => {
