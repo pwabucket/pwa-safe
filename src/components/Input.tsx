@@ -12,7 +12,7 @@ const Input: DynamicComponent<"input"> = ({ as, ...props }) => {
         "disabled:opacity-50",
 
         "autofill:bg-clip-text autofill:caret-white",
-        "autofill:inset-ring-30 autofill:inset-ring-transparent",
+        "autofill:inset-ring-30 autofill:inset-ring-neutral-700",
         "autofill:[-webkit-text-fill-color:var(--color-white)]",
         props.className,
       )}
