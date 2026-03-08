@@ -88,7 +88,7 @@ export default function Dashboard() {
 
             <Reorder.Group
               values={entries}
-              onReorder={(newOrder) => setEntries(newOrder)}
+              onReorder={(newOrder) => !search && setEntries(newOrder)}
               className="flex flex-col gap-2"
             >
               {filteredEntries.map((entry) => (
