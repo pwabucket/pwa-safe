@@ -10,7 +10,11 @@ const Input: DynamicComponent<"input"> = ({ as, ...props }) => {
         "p-2 font-bold text-green-500 placeholder:text-neutral-500",
         "bg-neutral-700 focus:outline-none",
         "disabled:opacity-50",
-        props.className
+
+        "autofill:bg-clip-text autofill:caret-white",
+        "autofill:inset-ring-30 autofill:inset-ring-transparent",
+        "autofill:[-webkit-text-fill-color:var(--color-white)]",
+        props.className,
       )}
     />
   );
