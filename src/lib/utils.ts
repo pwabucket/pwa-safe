@@ -6,7 +6,7 @@ import type { EncryptedMetadata, Entry } from "../types/entry";
 
 export const createMetadata = (
   type: "text" | "image" | "file",
-  content: string | File | Blob
+  content: string | File | Blob,
 ): EncryptedMetadata => {
   const metadata: EncryptedMetadata = { type };
 
@@ -51,7 +51,7 @@ export const zipAndDownloadBundle = ({
 
 export const zipAndDownloadEncryptedResult = (
   filename: string,
-  encryptionResult: EncryptionResult
+  encryptionResult: EncryptionResult,
 ) => {
   const zip = new JSZip();
 
@@ -147,13 +147,39 @@ export function cn(...inputs: ClassValue[]) {
 export function searchProperties<T extends Record<string, unknown>>(
   list: Array<T>,
   search: string,
-  properties: (keyof T)[]
+  properties: (keyof T)[],
 ) {
   return list.filter((item) =>
     properties.some(
       (property) =>
         typeof item[property] === "string" &&
-        item[property]?.toLowerCase().includes(search.toLowerCase())
-    )
+        item[property]?.toLowerCase().includes(search.toLowerCase()),
+    ),
   );
+}
+
+export function formatRelativeTime(timestamp: number): string {
+  const now = Date.now();
+  const diff = now - timestamp;
+  const seconds = Math.floor(diff / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const months = Math.floor(days / 30);
+  const years = Math.floor(days / 365);
+
+  if (seconds < 60) return "just now";
+  if (minutes < 60) return `${minutes}m ago`;
+  if (hours < 24) return `${hours}h ago`;
+  if (days < 30) return `${days}d ago`;
+  if (months < 12) return `${months}mo ago`;
+  return `${years}y ago`;
+}
+
+export function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  if (bytes < 1024 * 1024 * 1024)
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
 }
