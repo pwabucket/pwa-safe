@@ -1,20 +1,20 @@
-import { Link } from "react-router";
 import { useCallback, useState } from "react";
 
 import AccessCodeDialog from "./AccessCodeDialog";
 import AccessCodeInput from "./AccessCodeInput";
-import Button from "./Button";
-import useAppStore from "../store/useAppStore";
-import { cn } from "../lib/utils";
 import AppVersion from "./AppVersion";
+import Button from "./Button";
+import { Link } from "react-router";
 import ResetSafe from "./ResetSafe";
-import { useMutation } from "@tanstack/react-query";
+import { cn } from "../lib/utils";
 import { useAccessCodeInput } from "../hooks/useAccessCodeInput";
+import useAppStore from "../store/useAppStore";
+import { useMutation } from "@tanstack/react-query";
 
 function Auth({ onSuccessfulLogin }: { onSuccessfulLogin?: () => void }) {
   const accessCodeHash = useAppStore((state) => state.accessCodeHash);
   const setDecryptedAccessCode = useAppStore(
-    (state) => state.setDecryptedAccessCode
+    (state) => state.setDecryptedAccessCode,
   );
   const verifyAccessCode = useAppStore((state) => state.verifyAccessCode);
   const [showAccessCodeDialog, setShowAccessCodeDialog] = useState(false);
@@ -40,7 +40,7 @@ function Auth({ onSuccessfulLogin }: { onSuccessfulLogin?: () => void }) {
       setShowAccessCodeDialog(true);
       mutation.mutate(code);
     },
-    [mutation]
+    [mutation],
   );
 
   /* Handle completion of access code verification */
@@ -58,7 +58,7 @@ function Auth({ onSuccessfulLogin }: { onSuccessfulLogin?: () => void }) {
     <div
       className={cn(
         "flex flex-col justify-center gap-4",
-        "min-h-dvh p-4 w-full max-w-sm mx-auto"
+        "min-h-dvh p-4 w-full max-w-md mx-auto",
       )}
     >
       <h1 className="text-6xl text-center text-green-500 font-audiowide leading-none">

@@ -1,13 +1,12 @@
-import { Navigate } from "react-router";
-import { ReactTyped } from "react-typed";
-import { useCallback } from "react";
-
 import AccessCodeDialog from "../components/AccessCodeDialog";
 import AccessCodeInput from "../components/AccessCodeInput";
-import useAccessCodeDialogManager from "../hooks/useAccessCodeDialogManager";
-import useAppStore from "../store/useAppStore";
+import { Navigate } from "react-router";
+import { ReactTyped } from "react-typed";
 import { cn } from "../lib/utils";
+import useAccessCodeDialogManager from "../hooks/useAccessCodeDialogManager";
 import { useAccessCodeInput } from "../hooks/useAccessCodeInput";
+import useAppStore from "../store/useAppStore";
+import { useCallback } from "react";
 
 export default function CreateAccessCode() {
   const {
@@ -29,7 +28,7 @@ export default function CreateAccessCode() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       stopProcessing();
     },
-    [setAccessCode, showDialog, startProcessing, stopProcessing]
+    [setAccessCode, showDialog, startProcessing, stopProcessing],
   );
 
   const inputManager = useAccessCodeInput(handleAccessCodeCreated);
@@ -42,7 +41,7 @@ export default function CreateAccessCode() {
     <div
       className={cn(
         "flex flex-col justify-center gap-4",
-        "min-h-dvh p-4 w-full max-w-sm mx-auto"
+        "min-h-dvh p-4 w-full max-w-md mx-auto",
       )}
     >
       <h1 className="text-3xl text-center text-green-500 font-audiowide">
