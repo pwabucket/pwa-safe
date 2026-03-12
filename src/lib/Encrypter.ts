@@ -1,6 +1,7 @@
-import { gcm as aes256gcm, randomBytes } from "@noble/ciphers/webcrypto";
+import { gcm as aes256gcm } from "@noble/ciphers/webcrypto.js";
 import { base64 } from "@scure/base";
-import { scryptAsync } from "@noble/hashes/scrypt";
+import { randomBytes } from "@noble/ciphers/utils.js";
+import { scryptAsync } from "@noble/hashes/scrypt.js";
 
 export type EncryptableData = string | Uint8Array | ArrayBuffer;
 export type EncryptionResult = {
@@ -50,8 +51,8 @@ export default class Encrypter {
       typeof data === "string"
         ? new TextEncoder().encode(data)
         : data instanceof ArrayBuffer
-        ? new Uint8Array(data)
-        : data;
+          ? new Uint8Array(data)
+          : data;
 
     const encrypted = await cipher.encrypt(dataBytes);
 

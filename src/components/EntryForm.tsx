@@ -1,24 +1,24 @@
 import { Controller, useForm } from "react-hook-form";
-import type { SubmitHandler } from "react-hook-form";
-import { Tabs } from "radix-ui";
+import type { Entry, EntryFormData } from "../types/entry";
 import {
-  MdOutlineKey,
-  MdTextFields,
-  MdImage,
   MdAttachFile,
   MdDelete,
   MdEdit,
+  MdImage,
+  MdOutlineKey,
+  MdTextFields,
 } from "react-icons/md";
 
 import Button from "./Button";
-import Input from "./Input";
-import Textarea from "./Textarea";
-import type { Entry, EntryFormData } from "../types/entry";
 import { EntryFormDropzone } from "./EntryFormDropzone";
 import { EntryFormFileContent } from "./EntryFormFileContent";
 import { EntryFormImageContent } from "./EntryFormImageContent";
 import { EntryFormTabContent } from "./EntryFormTabContent";
 import { EntryFormTabTriggerButton } from "./EntryFormTabTriggerButton";
+import Input from "./Input";
+import type { SubmitHandler } from "react-hook-form";
+import { Tabs } from "radix-ui";
+import Textarea from "./Textarea";
 
 export default function EntryForm({
   disableTitle = false,
@@ -28,7 +28,7 @@ export default function EntryForm({
   onSubmit: SubmitHandler<EntryFormData>;
 }) {
   const { control, handleSubmit, watch, setValue } = useForm<EntryFormData>({
-    defaultValues: { type: "text", content: "" },
+    defaultValues: { title: "", type: "text", content: "" },
   });
 
   const type = watch("type");
@@ -40,7 +40,7 @@ export default function EntryForm({
 
   const handleFileChange = (
     onChange: (file: File) => void,
-    accept?: string
+    accept?: string,
   ) => {
     const input = document.createElement("input");
     input.type = "file";

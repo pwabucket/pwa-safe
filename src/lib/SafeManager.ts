@@ -1,5 +1,5 @@
 import { base64 } from "@scure/base";
-import { randomBytes } from "@noble/ciphers/webcrypto";
+import { randomBytes } from "@noble/ciphers/utils.js";
 
 import Encrypter, {
   type EncryptableData,
